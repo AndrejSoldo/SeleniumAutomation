@@ -1,0 +1,16 @@
+2021-10-21 14:46:05.1618|DEBUG|SeleniumProj.Falconeri|Language selected...
+2021-10-21 14:46:07.1415|DEBUG|SeleniumProj.Falconeri|Email input selected...
+2021-10-21 14:46:07.4886|DEBUG|SeleniumProj.Falconeri|Email entered...
+2021-10-21 14:46:09.7151|DEBUG|SeleniumProj.Falconeri|Register button clicked...
+2021-10-21 14:46:13.5957|DEBUG|SeleniumProj.Falconeri|Number selector clicked...
+2021-10-21 14:46:13.7601|FATAL|SeleniumProj.Falconeri|Exception: OpenQA.Selenium.NoSuchWindowException: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=95.0.4638.54)
+  at OpenQA.Selenium.Remote.RemoteWebDriver.UnpackAndThrowOnError (OpenQA.Selenium.Remote.Response errorResponse) [0x00121] in <19027cc8501444099501b87290061165>:0 
+  at OpenQA.Selenium.Remote.RemoteWebDriver.Execute (System.String driverCommandToExecute, System.Collections.Generic.Dictionary`2[TKey,TValue] parameters) [0x0003d] in <19027cc8501444099501b87290061165>:0 
+  at OpenQA.Selenium.Remote.RemoteWebDriver.FindElement (System.String mechanism, System.String value) [0x0001e] in <19027cc8501444099501b87290061165>:0 
+  at OpenQA.Selenium.Remote.RemoteWebDriver.FindElementByXPath (System.String xpath) [0x00000] in <19027cc8501444099501b87290061165>:0 
+  at OpenQA.Selenium.By+<>c__DisplayClass19_0.<XPath>b__0 (OpenQA.Selenium.ISearchContext context) [0x00000] in <19027cc8501444099501b87290061165>:0 
+  at OpenQA.Selenium.By.FindElement (OpenQA.Selenium.ISearchContext context) [0x00000] in <19027cc8501444099501b87290061165>:0 
+  at OpenQA.Selenium.Remote.RemoteWebDriver.FindElement (OpenQA.Selenium.By by) [0x00019] in <19027cc8501444099501b87290061165>:0 
+  at SeleniumProj.Falconeri.FindElement (OpenQA.Selenium.By selector, NLog.Logger logger) [0x00004] in /Users/SoldoA/Documents/GitHub/SeleniumAutomation/SeleniumProj/Falconeri.cs:23 

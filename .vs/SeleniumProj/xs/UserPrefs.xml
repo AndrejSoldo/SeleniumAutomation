@@ -1,0 +1,40 @@
+﻿<Properties StartupConfiguration="{57504B1D-A3EE-4407-BDC5-64F8FBFB5510}|Unit Tests">
+  <MonoDevelop.Ide.Workbench ActiveDocument="SeleniumProj/bin/Debug/CsvFiles/user.csv">
+    <Files>
+      <File FileName="SeleniumProj/BaseClass/BaseFalconeri.cs" Line="44" Column="34" />
+      <File FileName="SeleniumProj/Falconeri.cs" Line="1" Column="1" />
+      <File FileName="SeleniumProj/bin/Debug/CsvFiles/user.csv" Line="1" Column="1" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="SeleniumProj" expanded="True">
+            <Node name="SeleniumProj" expanded="True">
+              <Node name="BaseClass" expanded="True" selected="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+      <Pad Id="MonoDevelop.UnitTesting.TestPad">
+        <State name="__root__">
+          <Node name="SeleniumProj" expanded="True">
+            <Node name="SeleniumProj" expanded="True">
+              <Node name="SeleniumProj" expanded="True">
+                <Node name="Falconeri" expanded="True">
+                  <Node name="Register" selected="True" />
+                </Node>
+              </Node>
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.ItemProperties.SeleniumProj PreferredExecutionTarget="MonoDevelop.Default" />
+</Properties>

@@ -1,0 +1,13 @@
+2021-10-21 14:39:32.8604|DEBUG|SeleniumProj.Falconeri|Language selected...
+2021-10-21 14:39:34.0515|DEBUG|SeleniumProj.Falconeri|Email input selected...
+2021-10-21 14:39:34.2666|DEBUG|SeleniumProj.Falconeri|Email entered...
+2021-10-21 14:39:35.3431|FATAL|SeleniumProj.Falconeri|Exception: OpenQA.Selenium.WebDriverException: chrome not reachable
+  (Session info: chrome=95.0.4638.54)
+  at OpenQA.Selenium.Remote.RemoteWebDriver.UnpackAndThrowOnError (OpenQA.Selenium.Remote.Response errorResponse) [0x0010c] in <19027cc8501444099501b87290061165>:0 
+  at OpenQA.Selenium.Remote.RemoteWebDriver.Execute (System.String driverCommandToExecute, System.Collections.Generic.Dictionary`2[TKey,TValue] parameters) [0x0003d] in <19027cc8501444099501b87290061165>:0 
+  at OpenQA.Selenium.Remote.RemoteWebDriver.FindElement (System.String mechanism, System.String value) [0x0001e] in <19027cc8501444099501b87290061165>:0 
+  at OpenQA.Selenium.Remote.RemoteWebDriver.FindElementByXPath (System.String xpath) [0x00000] in <19027cc8501444099501b87290061165>:0 
+  at OpenQA.Selenium.By+<>c__DisplayClass19_0.<XPath>b__0 (OpenQA.Selenium.ISearchContext context) [0x00000] in <19027cc8501444099501b87290061165>:0 
+  at OpenQA.Selenium.By.FindElement (OpenQA.Selenium.ISearchContext context) [0x00000] in <19027cc8501444099501b87290061165>:0 
+  at OpenQA.Selenium.Remote.RemoteWebDriver.FindElement (OpenQA.Selenium.By by) [0x00019] in <19027cc8501444099501b87290061165>:0 
+  at SeleniumProj.Falconeri.FindElement (OpenQA.Selenium.By selector, NLog.Logger logger) [0x00004] in /Users/SoldoA/Documents/GitHub/SeleniumAutomation/SeleniumProj/Falconeri.cs:23 

@@ -4,11 +4,22 @@ using OpenQA.Selenium;
 using SeleniumProj.BaseClass;
 using System.Threading;
 using OpenQA.Selenium.Interactions;
+using System.Collections.Generic;
+using System.IO;
+using CsvHelper;
+using System.Globalization;
+using System.Linq;
 //using NunitVideoRecorder;
 
 namespace SeleniumProj
 {
-    //[WatchDog(SaveInClass.FailedTestsOnly)]
+
+    public class Foo
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+    }
+
     [TestFixture()]
     public class Falconeri : BaseFalconeri
     {
@@ -37,6 +48,15 @@ namespace SeleniumProj
 
             // return either the element or null
             return elementToReturn;
+        }
+
+        public List<Foo> InitializeCSV(string path)
+        {
+            var reader = new StreamReader(path);
+            var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+            var records = csv.GetRecords<Foo>().ToList();
+
+            return records;
         }
 
         //[Video(Name = "Very important test", Mode = SaveMe.Always)]
@@ -262,6 +282,16 @@ namespace SeleniumProj
         [Test(),Category("BuyingProductWithPaypal")]
         public void BuyingProductWithPaypal()
         {
+            var csv = InitializeCSV("./CsvFiles/user.csv");
+
+            Console.WriteLine(csv[0].Id);
+            Console.WriteLine(csv[0].Name);
+
+            Console.WriteLine(csv[1].Id);
+            Console.WriteLine(csv[1].Name);
+
+            Console.WriteLine(csv.Count());
+
             var logger = NLog.Web.NLogBuilder.ConfigureNLog("NLog.config").GetCurrentClassLogger();
 
             Thread.Sleep(1000);
