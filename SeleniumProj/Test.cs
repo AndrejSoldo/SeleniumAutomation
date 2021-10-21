@@ -13,7 +13,6 @@ namespace SeleniumProj
     [TestFixture()]
     public class Test : BaseTest
     {
-        public int[] soldo = new int[5];
         //[Video(Name = "Very important test", Mode = SaveMe.Always)]
         [Test(), Category("Soldo")]
         public void TestCase()

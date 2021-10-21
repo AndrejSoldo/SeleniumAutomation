@@ -3,6 +3,7 @@ using System;
 using OpenQA.Selenium;
 using SeleniumProj.BaseClass;
 using System.Threading;
+using OpenQA.Selenium.Interactions;
 //using NunitVideoRecorder;
 
 namespace SeleniumProj
@@ -38,28 +39,11 @@ namespace SeleniumProj
             return elementToReturn;
         }
 
-        public int[] soldo = new int[5];
         //[Video(Name = "Very important test", Mode = SaveMe.Always)]
         [Test(), Category("Soldo")]
         public void TestCase()
         {
-            soldo[0] = 10;
             var logger = NLog.Web.NLogBuilder.ConfigureNLog("NLog.config").GetCurrentClassLogger();
-
-            //try
-            //{
-            //logger.Debug("Test started...");
-
-            //}
-            //catch (Exception ex)
-            //{
-            //    logger.Error(ex, "Test failed");
-            //    throw;
-            //}
-            //finally
-            //{
-            //    NLog.LogManager.Shutdown();
-            //}
           
             IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
 
@@ -152,10 +136,234 @@ namespace SeleniumProj
             Assert.Pass("Falconeri testing");
         }
 
-        [Test(), Category("Soldo")]
-        public void Soldo()
+        [Test(), Category("Register")]
+        public void Register()
         {
-            Console.WriteLine("Soldo Test");
+            var logger = NLog.Web.NLogBuilder.ConfigureNLog("NLog.config").GetCurrentClassLogger();
+
+            Thread.Sleep(1000);
+
+            IWebElement languageButton = FindElement(By.XPath(".//*[@id='setInputLocaleCountry']"), logger);
+            languageButton.Click();
+            logger.Debug("Language selected...");
+
+            Thread.Sleep(1000);
+           
+           /* IWebElement acceptCookiesButton = FindElement(By.XPath(".//*[@id='cc-approve-button-thissite']"), logger);
+            acceptCookiesButton.Click();
+            logger.Debug("Accept cookies..."); */
+
+            IWebElement selectEmailButton = FindElement(By.XPath(".//*[@id='registration-form-email']"), logger);
+            selectEmailButton.Click();
+            logger.Debug("Email input selected...");
+
+            //previous used email was test121233@yopmail.com
+            selectEmailButton.SendKeys("test121234@yopmail.com");
+            logger.Debug("Email entered...");
+
+            Thread.Sleep(1000);
+
+            IWebElement registerButton = FindElement(By.XPath(".//*[@class='button mobile-extended wide button-black button-register-margin-40']"), logger);
+            registerButton.Click();
+            logger.Debug("Register button clicked...");
+
+            Thread.Sleep(1000);
+
+            IWebElement numberSelectorButton = FindElement(By.XPath(".//*[@class='chosen-container chosen-container-single chosen-container-single-nosearch']"), logger);
+            numberSelectorButton.Click();
+            logger.Debug("Number selector clicked...");
+
+            IWebElement numberSelect = FindElement(By.XPath(".//*[@data-option-array-index='1']"), logger);
+            numberSelect.Click();
+            logger.Debug("Number choses");
+
+            IWebElement phoneNumber = FindElement(By.XPath(".//*[@id='registration-form-phone']"),logger);
+            phoneNumber.SendKeys("666666");
+            logger.Debug("Phone number entered...");
+
+            IWebElement goButton = FindElement(By.XPath(".//*[@class='button wide mobile-extended button-black registerPhoneButton']"), logger);
+            goButton.Click();
+            logger.Debug("Go button clicked...");
+
+            Thread.Sleep(1000);
+
+            IWebElement genderButton = FindElement(By.XPath(".//*[@for='gender-4']"), logger);
+            genderButton.Click();
+            logger.Debug("Gender selected...");
+
+            IWebElement firstName= FindElement(By.XPath(".//*[@id='registration-form-fname']"), logger);
+            firstName.SendKeys("Tea");
+            logger.Debug("First name entered...");
+
+            IWebElement lastName = FindElement(By.XPath(".//*[@id='registration-form-lname']"), logger);
+            lastName.SendKeys("Test");
+            logger.Debug("Last name entered...");
+
+            IWebElement password = FindElement(By.XPath(".//*[@id='registration-form-password']"), logger);
+            password.SendKeys("Test111?");
+            logger.Debug("Password entered...");
+
+            IWebElement passwordRepeat= FindElement(By.XPath(".//*[@id='registration-form-password-confirm']"), logger);
+            passwordRepeat.SendKeys("Test111?");
+            logger.Debug("Repeated password entered...");
+
+            IWebElement recevingNews = FindElement(By.XPath(".//*[@for='add-to-email-list-no']"), logger);
+            recevingNews.Click();
+            logger.Debug("Receving news choice selected...");
+
+            IWebElement registrationForFalconeriLoyalty = FindElement(By.XPath(".//*[@for='loyalty-yes']"), logger);
+            registrationForFalconeriLoyalty.Click();
+            logger.Debug("Subscribing for Falconeri Loyalty...");
+
+            Actions actions = new Actions(driver);
+            actions.MoveToElement(registrationForFalconeriLoyalty);
+            actions.Perform();
+
+            Thread.Sleep(3000);
+
+            IWebElement clickingOnMonth = FindElement(By.XPath(".//*[@class='chosen-container chosen-container-single chosen-container-single-nosearch']"), logger);
+            clickingOnMonth.Click();
+            clickingOnMonth.Click();
+            logger.Debug("Month clicked...");
+
+            IWebElement choosingMonth = FindElement(By.XPath(".//*[@data-option-array-index='1']"), logger);
+            choosingMonth.Click();
+            logger.Debug("Month choosen...");
+
+            IWebElement clickingOnDay = FindElement(By.XPath(".//*[@class='form-item cell large-2 small-4 date-picker-day-container']"), logger);
+            clickingOnDay.Click();
+            logger.Debug("Day clicked...");
+
+            IWebElement choosingDay = FindElement(By.XPath(".//*[@data-option-array-index='31']"), logger);
+
+            actions.MoveToElement(choosingDay);
+            actions.Perform();
+
+            choosingDay.Click();
+            logger.Debug("Day choosen...");
+
+            IWebElement clickingOnYear = FindElement(By.XPath(".//*[@class='form-item cell large-2 small-4 date-picker-year-container']"), logger);
+            clickingOnYear.Click();
+            logger.Debug("Year clicked...");
+
+            IWebElement choosingYear = FindElement(By.XPath(".//*[@data-option-array-index='36']"), logger);
+
+            actions.MoveToElement(choosingYear);
+            actions.Perform();
+
+            choosingYear.Click();
+            logger.Debug("Year choosen...");
+
+          /*  IWebElement registrationButton = FindElement(By.XPath(".//*[@class='button wide button-register-final button-black']"), logger);
+            registrationButton.Click();
+            logger.Debug("registration button clicked..."); */
+        }
+
+        [Test(),Category("BuyingProductWithPaypal")]
+        public void BuyingProductWithPaypal()
+        {
+            var logger = NLog.Web.NLogBuilder.ConfigureNLog("NLog.config").GetCurrentClassLogger();
+
+            Thread.Sleep(1000);
+
+            IWebElement languageButton = FindElement(By.XPath(".//*[@id='setInputLocaleCountry']"), logger);
+            languageButton.Click();
+            logger.Debug("Language selected...");
+
+            Thread.Sleep(2000);
+
+            IWebElement loginButton = FindElement(By.XPath(".//*[@class='force-hover font-normal js-login-form-show']"), logger);
+            loginButton.Click();
+            logger.Debug("Login button clicked...");
+            
+            IWebElement emailField = FindElement(By.XPath(".//*[@id='login-form-email']"), logger);
+            emailField.SendKeys("test121233@yopmail.com");
+            logger.Debug("Email field filled out...");
+
+            IWebElement passwordField = FindElement(By.XPath(".//*[@id='login-form-password']"), logger);
+            passwordField.SendKeys("Test111?");
+            logger.Debug("Password field filled out...");
+
+            IWebElement finalLoginButton = FindElement(By.XPath(".//*[@class='button button-black mobile-extended wide']"), logger);
+            finalLoginButton.Click();
+            logger.Debug("Final Login button clicked...");
+
+            Thread.Sleep(2000);
+
+            IWebElement addressButton = FindElement(By.XPath(".//*[@class='account-menu-link' and @href='/us/addressbook/']"), logger);
+            addressButton.Click();
+            logger.Debug("Address button clicked...");
+
+            IWebElement addAddressButton = FindElement(By.XPath(".//*[@class='add-address-button']"), logger);
+            addAddressButton.Click();
+            logger.Debug("Add address button clicked...");
+
+            IWebElement firstName = FindElement(By.XPath(".//*[@id='firstName']"), logger);
+            firstName.SendKeys("Teya");
+            logger.Debug("First name entered...");
+
+            IWebElement lastName = FindElement(By.XPath(".//*[@id='lastName']"), logger);
+            lastName.SendKeys("TeyaTest");
+            logger.Debug("Last name entered...");
+
+            IWebElement streetAddress = FindElement(By.XPath(".//*[@id='address1']"), logger);
+            streetAddress.SendKeys("2380 W US Hwy 89A");
+            logger.Debug("Street address entered...");
+
+            IWebElement cityField = FindElement(By.XPath(".//*[@id='city']"), logger);
+            cityField.SendKeys("2380 W US Hwy 89A");
+            logger.Debug("City entered...");
+
+            IWebElement postcodeField = FindElement(By.XPath(".//*[@id='zipCode']"), logger);
+            postcodeField.SendKeys("86336");
+            logger.Debug("Postcode field entered...");
+
+            IWebElement stateField = FindElement(By.XPath(".//*[@for='state']"), logger);
+            stateField.Click();
+            logger.Debug("State clicked...");
+
+            Thread.Sleep(1000);
+
+            IWebElement stateChoosen = FindElement(By.XPath(".//*[@data-option-array-index='4']"), logger);
+            stateChoosen.Click();
+            logger.Debug("State choosen...");
+
+            IWebElement countryField = FindElement(By.XPath(".//*[@class='chosen-container chosen-container-single chosen-container-single-nosearch']"), logger);
+            countryField.Click();
+            logger.Debug("Country clicked...");
+
+            Thread.Sleep(1000);
+
+            IWebElement countryChoosen = FindElement(By.XPath("(.//*[@class='chosen-results'])[2]"), logger);
+            countryChoosen.Click();
+            logger.Debug("Country choosen...");
+
+            IWebElement saveChangesButton = FindElement(By.XPath(".//*[@class='button button-black activable-after-change']"), logger);
+            saveChangesButton.Click();
+            logger.Debug("Save changes clicked...");
+
+            IWebElement logoButton = FindElement(By.XPath(".//*[@class='logo-container']"), logger);
+            logoButton.Click();
+            logger.Debug("Logo button clicked...");
+
+            Thread.Sleep(1000);
+
+            IWebElement categoryButton = FindElement(By.XPath(".//*[@data-tab='#FAL_Women']"), logger);
+            Actions action = new Actions(driver);
+            action.MoveToElement(categoryButton).Perform();
+
+            Thread.Sleep(1000);
+
+            IWebElement subCategoryButton = FindElement(By.XPath(".//*[@data-href='/us/women/clothing/']"), logger);
+            subCategoryButton.Click();
+            logger.Debug("Sub category button clicked...");
+
+            Thread.Sleep(1000);
+
+            IWebElement secondSubCategoryButton = FindElement(By.XPath("(.//*[@href='/us/women/clothing/skirts/'])[1]"), logger);
+            secondSubCategoryButton.Click();
+            logger.Debug("Second sub category button clicked...");
+
         }
     }
 }
