@@ -9,6 +9,7 @@ using System.IO;
 using CsvHelper;
 using System.Globalization;
 using System.Linq;
+using CsvHelper.Configuration;
 //using NunitVideoRecorder;
 
 namespace SeleniumProj
@@ -18,6 +19,16 @@ namespace SeleniumProj
     {
         public int Id { get; set; }
         public string Name { get; set; }
+    }
+
+    public class Tea
+    {
+        public int Id { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Email { get; set; }
+        public string Password { get; set; }
+
     }
 
     [TestFixture()]
@@ -55,6 +66,20 @@ namespace SeleniumProj
             var reader = new StreamReader(path);
             var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
             var records = csv.GetRecords<Foo>().ToList();
+
+            return records;
+        }
+
+        public List<Tea> InitializeTeaCSV(string path, string delimiter)
+        {
+            var config = new CsvConfiguration(CultureInfo.InvariantCulture)
+            {
+                Delimiter = delimiter,
+            };
+
+            var reader = new StreamReader(path);
+            var csv = new CsvReader(reader, config);
+            var records = csv.GetRecords<Tea>().ToList();
 
             return records;
         }
@@ -282,7 +307,8 @@ namespace SeleniumProj
         [Test(),Category("BuyingProductWithPaypal")]
         public void BuyingProductWithPaypal()
         {
-            var csv = InitializeCSV("./CsvFiles/user.csv");
+            var csv = InitializeCSV("SeleniumProj/bin/Debug/CsvFiles/user.csv");
+
 
             Console.WriteLine(csv[0].Id);
             Console.WriteLine(csv[0].Name);
@@ -291,6 +317,13 @@ namespace SeleniumProj
             Console.WriteLine(csv[1].Name);
 
             Console.WriteLine(csv.Count());
+
+            var csvTea = InitializeTeaCSV("SeleniumProj/bin/Debug/CsvFiles/TeasUsers.csv", ";");
+
+            Console.WriteLine(csvTea[1].Id);
+            Console.WriteLine(csvTea[1].FirstName);
+            Console.WriteLine(csvTea[1].Email);
+            Console.WriteLine(csvTea[1].Password);
 
             var logger = NLog.Web.NLogBuilder.ConfigureNLog("NLog.config").GetCurrentClassLogger();
 
