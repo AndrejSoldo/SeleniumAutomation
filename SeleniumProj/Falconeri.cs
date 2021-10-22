@@ -11,7 +11,6 @@ using System.Globalization;
 using System.Linq;
 using CsvHelper.Configuration;
 using SeleniumProj.CsvTemplates;
-using CsvHelper.Configuration;
 //using NunitVideoRecorder;
 
 namespace SeleniumProj
