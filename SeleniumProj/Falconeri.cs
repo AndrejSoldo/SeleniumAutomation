@@ -10,6 +10,8 @@ using CsvHelper;
 using System.Globalization;
 using System.Linq;
 using CsvHelper.Configuration;
+using SeleniumProj.CsvTemplates;
+using CsvHelper.Configuration;
 //using NunitVideoRecorder;
 
 namespace SeleniumProj
@@ -84,6 +86,23 @@ namespace SeleniumProj
             var records = csv.GetRecords<Tea>().ToList();
 
             return records;
+        }
+
+        public void InsertOrder(string csvp ,string orderNum)
+        {
+            using (var stream = File.Open(csvp, FileMode.Append))
+            {
+                using (var streamWriter = new StreamWriter(stream))
+                {
+                    using (var csvWriter = new CsvWriter(streamWriter, new CsvConfiguration(CultureInfo.InvariantCulture) { HasHeaderRecord = false , Delimiter = ";"}))
+                    {
+                        //var orders = Orders.GetOrders();
+                        //csvWriter.WriteRecords(orders);
+                        var order = Orders.AddOrder(orderNum);
+                        csvWriter.WriteRecords(order);
+                    }
+                }
+            }
         }
 
         //[Video(Name = "Very important test", Mode = SaveMe.Always)]
@@ -330,10 +349,15 @@ namespace SeleniumProj
             Console.WriteLine(csvTea[1].FirstName);
             Console.WriteLine(csvTea[1].Email);
             Console.WriteLine(csvTea[1].Password);
+            var csvPath = Path.Combine(Environment.CurrentDirectory, $"orders/orders-{DateTime.UtcNow.ToFileTime()}.csv");
+
+            InsertOrder(csvPath, "012345");
 
             var logger = NLog.Web.NLogBuilder.ConfigureNLog("NLog.config").GetCurrentClassLogger();
 
             Thread.Sleep(1000);
+
+            InsertOrder(csvPath, "0123456666");
 
             IWebElement languageButton = FindElement(By.XPath(".//*[@id='setInputLocaleCountry']"), logger);
             languageButton.Click();
@@ -348,6 +372,8 @@ namespace SeleniumProj
             IWebElement emailField = FindElement(By.XPath(".//*[@id='login-form-email']"), logger);
             emailField.SendKeys("test121233@yopmail.com");
             logger.Debug("Email field filled out...");
+
+            InsertOrder(csvPath, "012345677777777");
 
             IWebElement passwordField = FindElement(By.XPath(".//*[@id='login-form-password']"), logger);
             passwordField.SendKeys("Test111?");
