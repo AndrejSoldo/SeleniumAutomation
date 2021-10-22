@@ -1,16 +1,18 @@
 ﻿<Properties StartupConfiguration="{57504B1D-A3EE-4407-BDC5-64F8FBFB5510}|Unit Tests">
-  <MonoDevelop.Ide.Workbench ActiveDocument="SeleniumProj/bin/Debug/CsvFiles/user.csv">
+  <MonoDevelop.Ide.Workbench ActiveDocument="SeleniumProj/Nlog.config">
     <Files>
-      <File FileName="SeleniumProj/BaseClass/BaseFalconeri.cs" Line="44" Column="34" />
-      <File FileName="SeleniumProj/Falconeri.cs" Line="1" Column="1" />
+      <File FileName="SeleniumProj/BaseClass/BaseFalconeri.cs" Line="35" Column="10" />
+      <File FileName="SeleniumProj/Falconeri.cs" Line="85" Column="1" />
       <File FileName="SeleniumProj/bin/Debug/CsvFiles/user.csv" Line="1" Column="1" />
+      <File FileName="SeleniumProj/Nlog.config" Line="1" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="SeleniumProj" expanded="True">
             <Node name="SeleniumProj" expanded="True">
-              <Node name="BaseClass" expanded="True" selected="True" />
+              <Node name="BaseClass" expanded="True" />
+              <Node name="Nlog.config" selected="True" />
             </Node>
           </Node>
         </State>
@@ -21,7 +23,7 @@
             <Node name="SeleniumProj" expanded="True">
               <Node name="SeleniumProj" expanded="True">
                 <Node name="Falconeri" expanded="True">
-                  <Node name="Register" selected="True" />
+                  <Node name="BuyingProductWithPaypal" selected="True" />
                 </Node>
               </Node>
             </Node>

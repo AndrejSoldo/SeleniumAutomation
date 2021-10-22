@@ -79,7 +79,7 @@ namespace SeleniumProj
                 Delimiter = delimiter,
             };
 
-            var reader = new StreamReader(Path.GetFullPath(path));
+            var reader = new StreamReader(path);
             var csv = new CsvReader(reader, config);
             var records = csv.GetRecords<Tea>().ToList();
 
