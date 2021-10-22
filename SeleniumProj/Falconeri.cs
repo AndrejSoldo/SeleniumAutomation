@@ -34,6 +34,8 @@ namespace SeleniumProj
     [TestFixture()]
     public class Falconeri : BaseFalconeri
     {
+        public string fullPath;
+
         public IWebElement FindElement(By selector, NLog.Logger logger)
         {
             // Return null by default
@@ -77,7 +79,7 @@ namespace SeleniumProj
                 Delimiter = delimiter,
             };
 
-            var reader = new StreamReader(path);
+            var reader = new StreamReader(Path.GetFullPath(path));
             var csv = new CsvReader(reader, config);
             var records = csv.GetRecords<Tea>().ToList();
 
@@ -299,15 +301,19 @@ namespace SeleniumProj
             choosingYear.Click();
             logger.Debug("Year choosen...");
 
-          /*  IWebElement registrationButton = FindElement(By.XPath(".//*[@class='button wide button-register-final button-black']"), logger);
-            registrationButton.Click();
-            logger.Debug("registration button clicked..."); */
+            /*  IWebElement registrationButton = FindElement(By.XPath(".//*[@class='button wide button-register-final button-black']"), logger);
+              registrationButton.Click();
+              logger.Debug("registration button clicked..."); */
+
+            logger.Debug("Test finished!");
+            NLog.LogManager.Shutdown();
+            Assert.Pass("Falconeri testing");
         }
 
         [Test(),Category("BuyingProductWithPaypal")]
         public void BuyingProductWithPaypal()
         {
-            var csv = InitializeCSV("SeleniumProj/bin/Debug/CsvFiles/user.csv");
+            var csv = InitializeCSV("CsvFiles/user.csv");
 
 
             Console.WriteLine(csv[0].Id);
@@ -318,7 +324,7 @@ namespace SeleniumProj
 
             Console.WriteLine(csv.Count());
 
-            var csvTea = InitializeTeaCSV("SeleniumProj/bin/Debug/CsvFiles/TeasUsers.csv", ";");
+            var csvTea = InitializeTeaCSV("CsvFiles/TeasUsers.csv", ";");
 
             Console.WriteLine(csvTea[1].Id);
             Console.WriteLine(csvTea[1].FirstName);
@@ -426,6 +432,10 @@ namespace SeleniumProj
             IWebElement secondSubCategoryButton = FindElement(By.XPath("(.//*[@href='/us/women/clothing/skirts/'])[1]"), logger);
             secondSubCategoryButton.Click();
             logger.Debug("Second sub category button clicked...");
+
+            logger.Debug("Test finished!");
+            NLog.LogManager.Shutdown();
+            Assert.Pass("Falconeri testing");
 
         }
     }
