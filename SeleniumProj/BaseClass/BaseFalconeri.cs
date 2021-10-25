@@ -24,6 +24,9 @@ namespace SeleniumProj.BaseClass
                 Url = "https://test.falconeri.com/us/login"
             };
             driver.Manage().Window.Maximize();
+            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(60);
+            driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(60);
+            driver.Manage().Timeouts().AsynchronousJavaScript = TimeSpan.FromSeconds(60);
         }
 
         [OneTimeTearDown()]

@@ -11,6 +11,7 @@ using System.Globalization;
 using System.Linq;
 using CsvHelper.Configuration;
 using SeleniumProj.CsvTemplates;
+using OpenQA.Selenium.Support.UI;
 //using NunitVideoRecorder;
 
 namespace SeleniumProj
@@ -332,6 +333,7 @@ namespace SeleniumProj
         public void BuyingProductWithPaypal()
         {
             var csv = InitializeCSV("CsvFiles/user.csv");
+            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(60));
 
 
             Console.WriteLine(csv[0].Id);
@@ -354,17 +356,20 @@ namespace SeleniumProj
 
             var logger = NLog.Web.NLogBuilder.ConfigureNLog("NLog.config").GetCurrentClassLogger();
 
-            Thread.Sleep(1000);
+            IWebElement languageButton = wait.Until(ExpectedConditions.ElementExists(By.XPath(".//*[@id='setInputLocaleCountry']")));
+
+            //Thread.Sleep(1000);
 
             InsertOrder(csvPath, "0123456666");
 
-            IWebElement languageButton = FindElement(By.XPath(".//*[@id='setInputLocaleCountry']"), logger);
+            //IWebElement languageButton = FindElement(By.XPath(".//*[@id='setInputLocaleCountry']"), logger);
             languageButton.Click();
             logger.Debug("Language selected...");
 
-            Thread.Sleep(2000);
+            Thread.Sleep(100);
+            IWebElement loginButton = wait.Until(ExpectedConditions.ElementExists(By.XPath(".//*[@data-tab='tab-login-cell']")));
 
-            IWebElement loginButton = FindElement(By.XPath(".//*[@class='force-hover font-normal js-login-form-show']"), logger);
+            //IWebElement loginButton = FindElement(By.XPath(".//*[@class='force-hover font-normal js-login-form-show']"), logger);
             loginButton.Click();
             logger.Debug("Login button clicked...");
             
@@ -382,13 +387,15 @@ namespace SeleniumProj
             finalLoginButton.Click();
             logger.Debug("Final Login button clicked...");
 
-            Thread.Sleep(2000);
+            Thread.Sleep(100);
 
-            IWebElement addressButton = FindElement(By.XPath(".//*[@class='account-menu-link' and @href='/us/addressbook/']"), logger);
+            IWebElement addressButton = wait.Until(ExpectedConditions.ElementExists(By.XPath(".//*[@class='account-menu-link' and @href='/us/addressbook/']")));
+            //FindElement(By.XPath(".//*[@class='account-menu-link' and @href='/us/addressbook/']"), logger);
             addressButton.Click();
             logger.Debug("Address button clicked...");
 
-            IWebElement addAddressButton = FindElement(By.XPath(".//*[@class='add-address-button']"), logger);
+            IWebElement addAddressButton = wait.Until(ExpectedConditions.ElementExists(By.XPath(".//*[@class='add-address-button']")));
+            //FindElement(By.XPath(".//*[@class='add-address-button']"), logger);
             addAddressButton.Click();
             logger.Debug("Add address button clicked...");
 
@@ -416,7 +423,7 @@ namespace SeleniumProj
             stateField.Click();
             logger.Debug("State clicked...");
 
-            Thread.Sleep(1000);
+            Thread.Sleep(100);
 
             IWebElement stateChoosen = FindElement(By.XPath(".//*[@data-option-array-index='4']"), logger);
             stateChoosen.Click();
@@ -426,7 +433,7 @@ namespace SeleniumProj
             countryField.Click();
             logger.Debug("Country clicked...");
 
-            Thread.Sleep(1000);
+            Thread.Sleep(100);
 
             IWebElement countryChoosen = FindElement(By.XPath("(.//*[@class='chosen-results'])[2]"), logger);
             countryChoosen.Click();
@@ -440,23 +447,25 @@ namespace SeleniumProj
             logoButton.Click();
             logger.Debug("Logo button clicked...");
 
-            Thread.Sleep(1000);
+            Thread.Sleep(100);
 
-            IWebElement categoryButton = FindElement(By.XPath(".//*[@data-tab='#FAL_Women']"), logger);
-            Actions action = new Actions(driver);
-            action.MoveToElement(categoryButton).Perform();
+            //IWebElement categoryButton = FindElement(By.XPath(".//*[@data-tab='#FAL_Women']"), logger);
+            //Actions action = new Actions(driver);
+            //action.MoveToElement(categoryButton).Perform();
 
-            Thread.Sleep(1000);
+            //Thread.Sleep(1000);
 
-            IWebElement subCategoryButton = FindElement(By.XPath(".//*[@data-href='/us/women/clothing/']"), logger);
-            subCategoryButton.Click();
-            logger.Debug("Sub category button clicked...");
+            //IWebElement subCategoryButton = FindElement(By.XPath(".//*[@data-href='/us/women/clothing/']"), logger);
+            //subCategoryButton.Click();
+            //logger.Debug("Sub category button clicked...");
 
-            Thread.Sleep(1000);
+            //Thread.Sleep(1000);
 
-            IWebElement secondSubCategoryButton = FindElement(By.XPath("(.//*[@href='/us/women/clothing/skirts/'])[1]"), logger);
-            secondSubCategoryButton.Click();
-            logger.Debug("Second sub category button clicked...");
+            //IWebElement secondSubCategoryButton = FindElement(By.XPath("(.//*[@href='/us/women/clothing/skirts/'])[1]"), logger);
+            //secondSubCategoryButton.Click();
+            //logger.Debug("Second sub category button clicked...");
+
+            driver.Url = "https://test.falconeri.com/us/women/clothing/skirts/";
 
             logger.Debug("Test finished!");
             NLog.LogManager.Shutdown();
