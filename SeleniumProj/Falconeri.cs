@@ -107,7 +107,7 @@ namespace SeleniumProj
 
         //[Video(Name = "Very important test", Mode = SaveMe.Always)]
         [Test(), Category("Soldo")]
-        public void TestCase()
+        public void EditProfile()
         {
             var logger = NLog.Web.NLogBuilder.ConfigureNLog("NLog.config").GetCurrentClassLogger();
           
@@ -142,9 +142,9 @@ namespace SeleniumProj
 
             Thread.Sleep(1000);
 
-            IWebElement approveButton = FindElement(By.Id("cc-approve-button-thissite"), logger);
-            approveButton.Click();
-            logger.Debug("Policy accepted...");
+            //IWebElement approveButton = FindElement(By.Id("cc-approve-button-thissite"), logger);
+            //approveButton.Click();
+            //logger.Debug("Policy accepted...");
 
             IWebElement login = FindElement(By.XPath(".//*[@data-tab='tab-login-cell']"), logger);
             login.Click();
@@ -330,8 +330,10 @@ namespace SeleniumProj
         }
 
         [Test(),Category("BuyingProductWithPaypal")]
+        [Obsolete]
         public void BuyingProductWithPaypal()
         {
+            IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
             var csv = InitializeCSV("CsvFiles/user.csv");
             WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(60));
 
@@ -467,10 +469,40 @@ namespace SeleniumProj
 
             driver.Url = "https://test.falconeri.com/us/women/clothing/skirts/";
 
+           
+            //driver.Navigate().GoToUrl("http://www.google.com");
+
             logger.Debug("Test finished!");
             NLog.LogManager.Shutdown();
             Assert.Pass("Falconeri testing");
 
+        }
+        [Test()]
+        public void OpenYopmail()
+        {
+            var logger = NLog.Web.NLogBuilder.ConfigureNLog("NLog.config").GetCurrentClassLogger();
+            IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
+            js.ExecuteScript("window.open('https://yopmail.com/en/wm', 'Newest Window', null)");
+            driver.SwitchTo().Window(driver.WindowHandles.Last());
+            Thread.Sleep(1000);
+            IWebElement cookies = FindElement(By.XPath(".//*[@id='accept']"), logger);
+            cookies.Click();
+
+            Thread.Sleep(1000);
+            driver.SwitchTo().Window(driver.WindowHandles.First());
+            Thread.Sleep(1000);
+
+            driver.SwitchTo().Window(driver.WindowHandles.Last());
+            IWebElement input = FindElement(By.XPath(".//*[@class='ycptinput']"), logger);
+            input.SendKeys("soldato" + Keys.Enter);
+
+
+            Thread.Sleep(1000);
+            driver.SwitchTo().Window(driver.WindowHandles.First());
+
+            logger.Debug("Test finished!");
+            NLog.LogManager.Shutdown();
+            Assert.Pass("Falconeri testing");
         }
     }
 }
