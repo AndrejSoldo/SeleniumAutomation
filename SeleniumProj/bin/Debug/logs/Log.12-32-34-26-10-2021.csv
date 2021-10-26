@@ -1,0 +1,15 @@
+2021-10-26 12:32:34.2697|FATAL|SeleniumProj.Falconeri|Exception: OpenQA.Selenium.WebDriverException: The HTTP request to the remote WebDriver server for URL http://localhost:61550/session/493b67d6707f53736aa4596ec1bd86b9/element timed out after 60 seconds. ---> System.Net.WebException: The operation has timed out.
+  at System.Net.HttpWebRequest.RunWithTimeoutWorker[T] (System.Threading.Tasks.Task`1[TResult] workerTask, System.Int32 timeout, System.Action abort, System.Func`1[TResult] aborted, System.Threading.CancellationTokenSource cts) [0x000e8] in /Users/builder/jenkins/workspace/build-package-osx-mono/2020-02/external/bockbuild/builds/mono-x64/mcs/class/System/System.Net/HttpWebRequest.cs:956 
+  at System.Net.HttpWebRequest.GetResponse () [0x0000f] in /Users/builder/jenkins/workspace/build-package-osx-mono/2020-02/external/bockbuild/builds/mono-x64/mcs/class/System/System.Net/HttpWebRequest.cs:1218 
+  at OpenQA.Selenium.Remote.HttpCommandExecutor.MakeHttpRequest (OpenQA.Selenium.Remote.HttpCommandExecutor+HttpRequestInfo requestInfo) [0x0017f] in <19027cc8501444099501b87290061165>:0 
+   --- End of inner exception stack trace ---
+  at OpenQA.Selenium.Remote.HttpCommandExecutor.MakeHttpRequest (OpenQA.Selenium.Remote.HttpCommandExecutor+HttpRequestInfo requestInfo) [0x001ed] in <19027cc8501444099501b87290061165>:0 
+  at OpenQA.Selenium.Remote.HttpCommandExecutor.Execute (OpenQA.Selenium.Remote.Command commandToExecute) [0x00033] in <19027cc8501444099501b87290061165>:0 
+  at OpenQA.Selenium.Remote.DriverServiceCommandExecutor.Execute (OpenQA.Selenium.Remote.Command commandToExecute) [0x00033] in <19027cc8501444099501b87290061165>:0 
+  at OpenQA.Selenium.Remote.RemoteWebDriver.Execute (System.String driverCommandToExecute, System.Collections.Generic.Dictionary`2[TKey,TValue] parameters) [0x00014] in <19027cc8501444099501b87290061165>:0 
+  at OpenQA.Selenium.Remote.RemoteWebDriver.FindElement (System.String mechanism, System.String value) [0x0001e] in <19027cc8501444099501b87290061165>:0 
+  at OpenQA.Selenium.Remote.RemoteWebDriver.FindElementByXPath (System.String xpath) [0x00000] in <19027cc8501444099501b87290061165>:0 
+  at OpenQA.Selenium.By+<>c__DisplayClass19_0.<XPath>b__0 (OpenQA.Selenium.ISearchContext context) [0x00000] in <19027cc8501444099501b87290061165>:0 
+  at OpenQA.Selenium.By.FindElement (OpenQA.Selenium.ISearchContext context) [0x00000] in <19027cc8501444099501b87290061165>:0 
+  at OpenQA.Selenium.Remote.RemoteWebDriver.FindElement (OpenQA.Selenium.By by) [0x00019] in <19027cc8501444099501b87290061165>:0 
+  at SeleniumProj.Falconeri.FindElement (OpenQA.Selenium.By selector, NLog.Logger logger) [0x00004] in /Users/SoldoA/Documents/GitHub/SeleniumAutomation/SeleniumProj/Falconeri.cs:55 

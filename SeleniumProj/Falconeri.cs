@@ -33,6 +33,12 @@ namespace SeleniumProj
 
     }
 
+    public class OrderInfo
+    {
+        public string Sku { get; set; }
+        public string Options { get; set; }
+    }
+
     [TestFixture()]
     public class Falconeri : BaseFalconeri
     {
@@ -84,6 +90,20 @@ namespace SeleniumProj
             var reader = new StreamReader(path);
             var csv = new CsvReader(reader, config);
             var records = csv.GetRecords<Tea>().ToList();
+
+            return records;
+        }
+
+        public List<OrderInfo> InitializeOrderInfoCSV(string path, string delimiter)
+        {
+            var config = new CsvConfiguration(CultureInfo.InvariantCulture)
+            {
+                Delimiter = delimiter,
+            };
+
+            var reader = new StreamReader(path);
+            var csv = new CsvReader(reader, config);
+            var records = csv.GetRecords<OrderInfo>().ToList();
 
             return records;
         }
@@ -244,7 +264,7 @@ namespace SeleniumProj
             logger.Debug("Number choses");
 
             IWebElement phoneNumber = FindElement(By.XPath(".//*[@id='registration-form-phone']"),logger);
-            phoneNumber.SendKeys("666666");
+            phoneNumber.SendKeys("953502025");
             logger.Debug("Phone number entered...");
 
             IWebElement goButton = FindElement(By.XPath(".//*[@class='button wide mobile-extended button-black registerPhoneButton']"), logger);
@@ -258,7 +278,7 @@ namespace SeleniumProj
             logger.Debug("Gender selected...");
 
             IWebElement firstName= FindElement(By.XPath(".//*[@id='registration-form-fname']"), logger);
-            firstName.SendKeys("Tea");
+            firstName.SendKeys("Test");
             logger.Debug("First name entered...");
 
             IWebElement lastName = FindElement(By.XPath(".//*[@id='registration-form-lname']"), logger);
@@ -503,6 +523,35 @@ namespace SeleniumProj
             logger.Debug("Test finished!");
             NLog.LogManager.Shutdown();
             Assert.Pass("Falconeri testing");
+        }
+
+        [Test()]
+        public void Ordering()
+        {
+            //https://test.falconeri.com/us/product/DAL449A++8521M.html
+            var logger = NLog.Web.NLogBuilder.ConfigureNLog("NLog.config").GetCurrentClassLogger();
+            IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
+            var csv = InitializeOrderInfoCSV("orderingCsv/orderInfo.csv", ";");
+            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(60));
+
+            Console.WriteLine(csv[0].Sku);
+            Console.WriteLine(csv[0].Options);
+
+
+            for(int i = 0; i < csv.Count; i++)
+            {
+            driver.Navigate().GoToUrl($"https://test.falconeri.com/us/product/{csv[i].Sku}++{csv[i].Options}.html");
+                Thread.Sleep(1000);
+                IWebElement addToBag = FindElement(By.XPath($".//*[@data-pid='{csv[i].Sku}  {csv[i].Options}' and @class='cell auto add-to-cart button button-addtocart']"), logger);
+                Thread.Sleep(1000);
+                addToBag.Click();
+            }
+
+
+            logger.Debug("Test finished!");
+            NLog.LogManager.Shutdown();
+            Assert.Pass("Falconeri testing");
+            //.//*[@data-pid="DAL449A  8521M" and @class="cell auto add-to-cart button button-addtocart"]
         }
     }
 }
