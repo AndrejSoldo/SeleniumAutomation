@@ -192,7 +192,9 @@ C:/Users/GrabusicT/Documents/SeleniumTesting/SeleniumAutomation/SeleniumProj/obj
 /Users/SoldoA/Documents/GitHub/SeleniumAutomation/SeleniumProj/bin/Debug/System.Numerics.Vectors.dll
 /Users/SoldoA/Documents/GitHub/SeleniumAutomation/SeleniumProj/bin/Debug/System.Runtime.CompilerServices.Unsafe.dll
 /Users/SoldoA/Documents/GitHub/SeleniumAutomation/SeleniumProj/bin/Debug/System.Text.Encodings.Web.dll
+/Users/SoldoA/Documents/GitHub/SeleniumAutomation/SeleniumProj/bin/Debug/System.Text.Json.dll
 /Users/SoldoA/Documents/GitHub/SeleniumAutomation/SeleniumProj/bin/Debug/System.Threading.Tasks.Extensions.dll
+/Users/SoldoA/Documents/GitHub/SeleniumAutomation/SeleniumProj/bin/Debug/System.ValueTuple.dll
 /Users/SoldoA/Documents/GitHub/SeleniumAutomation/SeleniumProj/bin/Debug/WebDriver.dll
 /Users/SoldoA/Documents/GitHub/SeleniumAutomation/SeleniumProj/bin/Debug/WebDriver.Support.dll
 /Users/SoldoA/Documents/GitHub/SeleniumAutomation/SeleniumProj/bin/Debug/nunit.framework.xml
@@ -229,6 +231,8 @@ C:/Users/GrabusicT/Documents/SeleniumTesting/SeleniumAutomation/SeleniumProj/obj
 /Users/SoldoA/Documents/GitHub/SeleniumAutomation/SeleniumProj/bin/Debug/System.Threading.Tasks.Extensions.xml
 /Users/SoldoA/Documents/GitHub/SeleniumAutomation/SeleniumProj/bin/Debug/Microsoft.Bcl.AsyncInterfaces.xml
 /Users/SoldoA/Documents/GitHub/SeleniumAutomation/SeleniumProj/bin/Debug/CsvHelper.xml
+/Users/SoldoA/Documents/GitHub/SeleniumAutomation/SeleniumProj/bin/Debug/System.ValueTuple.xml
+/Users/SoldoA/Documents/GitHub/SeleniumAutomation/SeleniumProj/bin/Debug/System.Text.Json.xml
 /Users/SoldoA/Documents/GitHub/SeleniumAutomation/SeleniumProj/obj/Debug/SeleniumProj.csproj.CoreCompileInputs.cache
 /Users/SoldoA/Documents/GitHub/SeleniumAutomation/SeleniumProj/obj/Debug/SeleniumProj.csproj.CopyComplete
 /Users/SoldoA/Documents/GitHub/SeleniumAutomation/SeleniumProj/obj/Debug/SeleniumProj.dll

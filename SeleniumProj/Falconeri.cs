@@ -12,6 +12,8 @@ using System.Linq;
 using CsvHelper.Configuration;
 using SeleniumProj.CsvTemplates;
 using OpenQA.Selenium.Support.UI;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 //using NunitVideoRecorder;
 
 namespace SeleniumProj
@@ -37,6 +39,14 @@ namespace SeleniumProj
     {
         public string Sku { get; set; }
         public string Options { get; set; }
+    }
+
+    public class SoldoJson
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public string LastName { get; set; }
+
     }
 
     [TestFixture()]
@@ -106,6 +116,16 @@ namespace SeleniumProj
             var records = csv.GetRecords<OrderInfo>().ToList();
 
             return records;
+        }
+
+        public SoldoJson InitializeJson(string name)
+        {
+            StreamReader fstream = new StreamReader("JsonFiles/"+name);
+            
+
+            var myjson = JsonSerializer.Deserialize<SoldoJson>(fstream.ReadToEnd(), new JsonSerializerOptions { Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping });
+
+            return myjson;
         }
 
         public void InsertOrder(string csvp ,string orderNum)
@@ -540,18 +560,75 @@ namespace SeleniumProj
 
             for(int i = 0; i < csv.Count; i++)
             {
-            driver.Navigate().GoToUrl($"https://test.falconeri.com/us/product/{csv[i].Sku}++{csv[i].Options}.html");
+                driver.Navigate().GoToUrl($"https://test.falconeri.com/us/product/{csv[i].Sku}++{csv[i].Options}.html");
                 Thread.Sleep(1000);
-                IWebElement addToBag = FindElement(By.XPath($".//*[@data-pid='{csv[i].Sku}  {csv[i].Options}' and @class='cell auto add-to-cart button button-addtocart']"), logger);
+                IWebElement addToBag = FindElement(By.XPath($".//*[@class='cell auto add-to-cart button button-addtocart']"), logger);
                 Thread.Sleep(1000);
                 addToBag.Click();
             }
+
+            Thread.Sleep(1000);
+            IWebElement bag = FindElement(By.XPath(".//*[@class='button extended uppercase button-black minicart-checkout-button']"), logger);
+            Thread.Sleep(1000);
+            bag.Click();
+
+            Thread.Sleep(1000);
+            IWebElement checkout = FindElement(By.XPath(".//*[@class='button button-black checkout-btn']"), logger);
+            Thread.Sleep(1000);
+            checkout.Click();
+
+            
+            Thread.Sleep(1000);
+            IWebElement continueButton = FindElement(By.XPath(".//*[@class='button button-black submit-shipping wide fwidth-padding']"), logger);
+            Thread.Sleep(1000);
+            continueButton.Click();
+
+            
+            Thread.Sleep(1000);
+            IWebElement emailInput = FindElement(By.XPath(".//*[@id='shippingEmail']"), logger);
+            Thread.Sleep(1000);
+            emailInput.SendKeys("soldo@soldo.com");
+
+            
+            
+            Thread.Sleep(1000);
+            IWebElement numberPrefix = FindElement(By.XPath(".//*[@class='chosen-container chosen-container-single chosen-container-single-nosearch']"), logger);
+            Thread.Sleep(1000);
+            numberPrefix.Click();
+
+            Thread.Sleep(1000);
+            IWebElement numberSelect = FindElement(By.XPath(".//*[@data-option-array-index='2']"), logger);
+            Thread.Sleep(1000);
+            numberSelect.Click();
 
 
             logger.Debug("Test finished!");
             NLog.LogManager.Shutdown();
             Assert.Pass("Falconeri testing");
             //.//*[@data-pid="DAL449A  8521M" and @class="cell auto add-to-cart button button-addtocart"]
+        }
+        [Test()]
+        public void Json()
+        {
+            var soldoJson = new SoldoJson
+            {
+                Id = "0",
+                Name = "Andrej",
+                LastName = "Soldo"
+            };
+
+            string jsonSoldo = JsonSerializer.Serialize(soldoJson);
+            Console.WriteLine(jsonSoldo);
+
+            SoldoJson jsonDeserialize = JsonSerializer.Deserialize<SoldoJson>(jsonSoldo);
+            Console.WriteLine(jsonDeserialize.Id);
+            Console.WriteLine(jsonDeserialize.Name);
+            Console.WriteLine(jsonDeserialize.LastName);
+
+            //Loaded data from a file
+            Console.WriteLine(InitializeJson("soldoJson.json").Id);
+            Console.WriteLine(InitializeJson("soldoJson.json").Name);
+            Console.WriteLine(InitializeJson("soldoJson.json").LastName);
         }
     }
 }

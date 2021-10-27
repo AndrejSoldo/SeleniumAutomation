@@ -1,21 +1,22 @@
-﻿<Properties>
-  <MonoDevelop.Ide.Workbench ActiveDocument="SeleniumProj/Falconeri.cs">
+﻿<Properties StartupConfiguration="{57504B1D-A3EE-4407-BDC5-64F8FBFB5510}|Unit Tests">
+  <MonoDevelop.Ide.Workbench ActiveDocument="SeleniumProj/bin/Debug/JsonFiles/soldoJson.json">
     <Files>
       <File FileName="SeleniumProj/BaseClass/BaseFalconeri.cs" Line="35" Column="10" />
-      <File FileName="SeleniumProj/Falconeri.cs" Line="38" Column="33" />
+      <File FileName="SeleniumProj/Falconeri.cs" Line="124" Column="56" />
       <File FileName="SeleniumProj/bin/Debug/CsvFiles/user.csv" />
       <File FileName="SeleniumProj/Nlog.config" />
       <File FileName="SeleniumProj/CsvTemplates/Orders.cs" Line="6" Column="1" />
-      <File FileName="SeleniumProj/bin/Debug/orderingCsv/orderInfo.csv" Line="1" Column="1" />
+      <File FileName="SeleniumProj/bin/Debug/orderingCsv/orderInfo.csv" Line="17" Column="14" />
+      <File FileName="SeleniumProj/Capture.js" Line="45" Column="29" />
+      <File FileName="SeleniumProj/bin/Debug/JsonFiles/soldoJson.json" Line="3" Column="20" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="SeleniumProj" expanded="True">
-            <Node name="SeleniumProj" expanded="True">
+            <Node name="SeleniumProj" expanded="True" selected="True">
               <Node name="BaseClass" expanded="True" />
               <Node name="CsvTemplates" expanded="True" />
-              <Node name="Falconeri.cs" selected="True" />
             </Node>
           </Node>
         </State>
@@ -26,7 +27,7 @@
             <Node name="SeleniumProj" expanded="True">
               <Node name="SeleniumProj" expanded="True">
                 <Node name="Falconeri" expanded="True">
-                  <Node name="Register" selected="True" />
+                  <Node name="Json" selected="True" />
                 </Node>
               </Node>
             </Node>
