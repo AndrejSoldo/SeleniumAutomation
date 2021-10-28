@@ -14,6 +14,7 @@ using SeleniumProj.CsvTemplates;
 using OpenQA.Selenium.Support.UI;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.RegularExpressions;
 //using NunitVideoRecorder;
 
 namespace SeleniumProj
@@ -158,6 +159,22 @@ namespace SeleniumProj
                         //var orders = Orders.GetOrders();
                         //csvWriter.WriteRecords(orders);
                         var order = Orders.AddOrder(orderNum);
+                        csvWriter.WriteRecords(order);
+                    }
+                }
+            }
+        }
+        public void InsertOrder(string csvp, string orderNum, string lastName)
+        {
+            using (var stream = File.Open(csvp, FileMode.Append))
+            {
+                using (var streamWriter = new StreamWriter(stream))
+                {
+                    using (var csvWriter = new CsvWriter(streamWriter, new CsvConfiguration(CultureInfo.InvariantCulture) { HasHeaderRecord = false, Delimiter = ";" }))
+                    {
+                        //var orders = Orders.GetOrders();
+                        //csvWriter.WriteRecords(orders);
+                        var order = Orders.AddOrder(orderNum, lastName);
                         csvWriter.WriteRecords(order);
                     }
                 }
@@ -411,7 +428,7 @@ namespace SeleniumProj
         public void BuyingProductWithPaypal()
         {
             IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
-            var csv = InitializeCSV("CsvFiles/user.csv");
+            var csv = InitializeCSV("C:/Users/GrabusicT/Documents/SeleniumTesting/SeleniumAutomation/SeleniumProj/bin/Debug/CsvFiles/user.csv");
             WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(60));
 
 
@@ -423,13 +440,13 @@ namespace SeleniumProj
 
             Console.WriteLine(csv.Count());
 
-            var csvTea = InitializeTeaCSV("CsvFiles/TeasUsers.csv", ";");
+            var csvTea = InitializeTeaCSV("C:/Users/GrabusicT/Documents/SeleniumTesting/SeleniumAutomation/SeleniumProj/bin/Debug/CsvFiles/TeasUsers.csv", ";");
 
             Console.WriteLine(csvTea[1].Id);
             Console.WriteLine(csvTea[1].FirstName);
             Console.WriteLine(csvTea[1].Email);
             Console.WriteLine(csvTea[1].Password);
-            var csvPath = Path.Combine(Environment.CurrentDirectory, $"orders/orders-{DateTime.UtcNow.ToFileTime()}.csv");
+            var csvPath = Path.Combine(Environment.CurrentDirectory, $"C:/Users/GrabusicT/Documents/SeleniumTesting/SeleniumAutomation/SeleniumProj/bin/Debug/orders/orders-{DateTime.UtcNow.ToFileTime()}.csv");
 
             InsertOrder(csvPath, "012345");
 
@@ -457,6 +474,8 @@ namespace SeleniumProj
             logger.Debug("Email field filled out...");
 
             InsertOrder(csvPath, "012345677777777");
+
+            InsertOrder(csvPath, "012345677777777", "Soldo");
 
             IWebElement passwordField = FindElement(By.XPath(".//*[@id='login-form-password']"), logger);
             passwordField.SendKeys("Test111?");
@@ -834,10 +853,23 @@ namespace SeleniumProj
                 driver.SwitchTo().Window(driver.WindowHandles.Last());
                 driver.Navigate().GoToUrl($"https://yopmail.com/en/");
                 //Thread.Sleep(1000);
-
-
-
             }
+
+
+        }
+           
+        public string GetOrderNumber(string text)
+        {
+            // Create a pattern for a word that starts with letter "M"  
+            string pattern = @"[A-Z a-z !]+";
+            string orderText = text;
+            //"Thank you for your order 123213213213!"
+            
+            // Create a Regex
+            Regex rg = new Regex(pattern);
+            string orderNumber = Regex.Replace(orderText, pattern, "");
+            Console.WriteLine(orderNumber);
+            return orderNumber;
         }
     }
 }

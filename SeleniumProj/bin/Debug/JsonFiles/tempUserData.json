@@ -1,0 +1,18 @@
+{
+  "user": {
+    "email": "test_uat_flc_4@yopmail.com",
+    "pwd": "8mF.AER9fo",
+    "newName": "Soldo",
+    "streetAddress": "10447 Kenai Spur Hwy",
+    "appartment": "Mi 2",
+    "town": "Kenai",
+    "zipCode": "99611",
+    "state": "",
+    "country": "",
+    "creditCardName": "Kar",
+    "creditCardNumber": 4775718800002026,
+    "cardMonth": "05",
+    "cardYear": "27",
+    "cardCCV": "123"
+  }
+}

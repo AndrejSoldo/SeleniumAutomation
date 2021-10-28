@@ -1,0 +1,10 @@
+2021-10-22 13:18:44.4539|FATAL|SeleniumProj.Falconeri|Exception: OpenQA.Selenium.WebDriverException: chrome not reachable
+  (Session info: chrome=95.0.4638.54)
+   at OpenQA.Selenium.Remote.RemoteWebDriver.UnpackAndThrowOnError(Response errorResponse)
+   at OpenQA.Selenium.Remote.RemoteWebDriver.Execute(String driverCommandToExecute, Dictionary`2 parameters)
+   at OpenQA.Selenium.Remote.RemoteWebDriver.FindElement(String mechanism, String value)
+   at OpenQA.Selenium.Remote.RemoteWebDriver.FindElementByXPath(String xpath)
+   at OpenQA.Selenium.By.<>c__DisplayClass19_0.<XPath>b__0(ISearchContext context)
+   at OpenQA.Selenium.By.FindElement(ISearchContext context)
+   at OpenQA.Selenium.Remote.RemoteWebDriver.FindElement(By by)
+   at SeleniumProj.Falconeri.FindElement(By selector, Logger logger) in C:\Users\GrabusicT\Documents\SeleniumTesting\SeleniumAutomation\SeleniumProj\Falconeri.cs:line 48
