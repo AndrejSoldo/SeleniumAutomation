@@ -49,6 +49,25 @@ namespace SeleniumProj
 
     }
 
+    public class Users
+    {
+        public int Id { get; set; }
+        public string Email { get; set; }
+        public string Phone { get; set; }
+        public int Gender { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+
+
+
+        public string Password { get; set; }
+        public string NewsletterSubscription { get; set; }
+        public string LoyaltySubscription { get; set; }
+
+
+
+    }
+
     [TestFixture()]
     public class Falconeri : BaseFalconeri
     {
@@ -143,6 +162,24 @@ namespace SeleniumProj
                     }
                 }
             }
+        }
+
+        public List<Users> InitializeUsersCSV(string path, string delimiter)
+        {
+            var config = new CsvConfiguration(CultureInfo.InvariantCulture)
+            {
+                Delimiter = delimiter,
+            };
+
+
+
+            var reader = new StreamReader(path);
+            var csv = new CsvReader(reader, config);
+            var records = csv.GetRecords<Users>().ToList();
+
+
+
+            return records;
         }
 
         //[Video(Name = "Very important test", Mode = SaveMe.Always)]
@@ -494,7 +531,7 @@ namespace SeleniumProj
             //IWebElement categoryButton = FindElement(By.XPath(".//*[@data-tab='#FAL_Women']"), logger);
             //Actions action = new Actions(driver);
             //action.MoveToElement(categoryButton).Perform();
-
+            
             //Thread.Sleep(1000);
 
             //IWebElement subCategoryButton = FindElement(By.XPath(".//*[@data-href='/us/women/clothing/']"), logger);
@@ -629,6 +666,178 @@ namespace SeleniumProj
             Console.WriteLine(InitializeJson("soldoJson.json").Id);
             Console.WriteLine(InitializeJson("soldoJson.json").Name);
             Console.WriteLine(InitializeJson("soldoJson.json").LastName);
+        }
+
+        [Test()]
+        public void RegistrationWithCSVFile()
+        {
+            var logger = NLog.Web.NLogBuilder.ConfigureNLog("NLog.config").GetCurrentClassLogger();
+            var csvUserInformation = InitializeUsersCSV("CsvFiles/TeasUsersSecond.csv", ";");
+            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(60));
+            IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
+
+
+            //csvUserInformation.Count
+            for (int i = 1; i < 3; i++)
+            {
+                if (i == 1)
+                {
+                    IWebElement languageButton = wait.Until(ExpectedConditions.ElementExists(By.XPath(".//*[@id='setInputLocaleCountry']")));
+                    languageButton.Click();
+                    logger.Debug("Language selected...");
+                }
+
+
+
+                Thread.Sleep(1000);
+                IWebElement selectEmailButton = wait.Until(ExpectedConditions.ElementExists(By.XPath(".//*[@id='registration-form-email']")));
+                selectEmailButton.Click();
+                selectEmailButton.SendKeys(csvUserInformation[i].Email);
+                logger.Debug("Email entered...");
+
+
+
+                IWebElement registerButton = wait.Until(ExpectedConditions.ElementExists(By.XPath(".//*[@class='button mobile-extended wide button-black button-register-margin-40']")));
+                registerButton.Click();
+                logger.Debug("Register button clicked...");
+
+
+
+                IWebElement numberSelectorButton = wait.Until(ExpectedConditions.ElementExists(By.XPath(".//*[@class='chosen-container chosen-container-single chosen-container-single-nosearch']")));
+                numberSelectorButton.Click();
+                logger.Debug("Number selector clicked...");
+
+
+
+                IWebElement numberSelect = wait.Until(ExpectedConditions.ElementExists(By.XPath(".//*[@data-option-array-index='1']")));
+                numberSelect.Click();
+                logger.Debug("Number choses");
+
+
+
+                IWebElement phoneNumber = wait.Until(ExpectedConditions.ElementExists(By.XPath(".//*[@id='registration-form-phone']")));
+                phoneNumber.SendKeys(csvUserInformation[i].Phone);
+                logger.Debug("Phone number entered...");
+
+
+
+                IWebElement goButton = wait.Until(ExpectedConditions.ElementExists(By.XPath(".//*[@class='button wide mobile-extended button-black registerPhoneButton']")));
+                goButton.Click();
+                logger.Debug("Go button clicked...");
+
+
+
+                IWebElement genderButton = wait.Until(ExpectedConditions.ElementExists(By.XPath(".//*[@for='gender-4']")));
+                genderButton.Click();
+                logger.Debug("Gender selected...");
+
+
+
+                IWebElement firstName = wait.Until(ExpectedConditions.ElementExists(By.XPath(".//*[@id='registration-form-fname']")));
+                firstName.SendKeys(csvUserInformation[i].FirstName);
+                logger.Debug("First name entered...");
+
+
+
+                IWebElement lastName = wait.Until(ExpectedConditions.ElementExists(By.XPath(".//*[@id='registration-form-lname']")));
+                lastName.SendKeys(csvUserInformation[i].LastName);
+                logger.Debug("Last name entered...");
+
+
+
+                IWebElement password = wait.Until(ExpectedConditions.ElementExists(By.XPath(".//*[@id='registration-form-password']")));
+                password.SendKeys(csvUserInformation[i].Password);
+                logger.Debug("Password entered...");
+
+
+
+                IWebElement passwordRepeat = wait.Until(ExpectedConditions.ElementExists(By.XPath(".//*[@id='registration-form-password-confirm']")));
+                passwordRepeat.SendKeys(csvUserInformation[i].Password);
+                logger.Debug("Repeated password entered...");
+
+
+
+                IWebElement recevingNews = wait.Until(ExpectedConditions.ElementExists(By.XPath(".//*[@for='add-to-email-list-no']")));
+                recevingNews.Click();
+                logger.Debug("Receving news choice selected...");
+
+
+
+                IWebElement registrationForFalconeriLoyalty = wait.Until(ExpectedConditions.ElementExists(By.XPath(".//*[@for='loyalty-no']")));
+                registrationForFalconeriLoyalty.Click();
+                logger.Debug("Subscribing for Falconeri Loyalty...");
+
+
+
+                IWebElement registrationButton = wait.Until(ExpectedConditions.ElementExists(By.XPath(".//*[@class='button wide button-register-final button-black']")));
+                Actions action = new Actions(driver);
+                action.MoveToElement(registrationButton).Perform();
+                registrationButton.Click();
+                logger.Debug("registration button clicked...");
+
+
+
+                Thread.Sleep(1000);
+                driver.Navigate().GoToUrl($"https://test.falconeri.com/us/login");
+            }
+
+
+
+            Thread.Sleep(1000);
+
+
+
+            logger.Debug("Test finished!");
+            NLog.LogManager.Shutdown();
+            Assert.Pass("Falconeri testing");
+        }
+
+        [Test()]
+        public void AcceptingRegistration()
+        {
+            var logger = NLog.Web.NLogBuilder.ConfigureNLog("NLog.config").GetCurrentClassLogger();
+            var csvUserInformation = InitializeUsersCSV("CsvFiles/TeasUsersSecond.csv", ";");
+            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(60));
+            IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
+
+            js.ExecuteScript("window.open('https://yopmail.com/en/wm', 'Newest Window', null)");
+            driver.SwitchTo().Window(driver.WindowHandles.Last());
+            Thread.Sleep(1000);
+            IWebElement cookies = wait.Until(ExpectedConditions.ElementExists(By.XPath(".//*[@id='accept']")));
+            Thread.Sleep(1000);
+            cookies.Click();
+
+            for (int i = 0; i < csvUserInformation.Count; i++)
+            {
+                Thread.Sleep(2000);
+                IWebElement input = FindElement(By.XPath(".//*[@class='ycptinput']"), logger);
+                input.SendKeys(csvUserInformation[i].Email + Keys.Enter);
+
+
+
+                Thread.Sleep(1000);
+                IWebElement document = driver.FindElement(By.XPath(".//iframe[@id='ifmail']"));
+                driver.SwitchTo().Frame(document);
+
+
+
+                IWebElement accountButton = driver.FindElement(By.XPath(".//*[@valign='middle']//a"));
+
+
+
+                accountButton.Click();
+                driver.SwitchTo().Window(driver.WindowHandles.Last());
+                js.ExecuteScript("window.close();");
+
+
+
+                driver.SwitchTo().Window(driver.WindowHandles.Last());
+                driver.Navigate().GoToUrl($"https://yopmail.com/en/");
+                //Thread.Sleep(1000);
+
+
+
+            }
         }
     }
 }
