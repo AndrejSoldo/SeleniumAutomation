@@ -15,6 +15,7 @@ using OpenQA.Selenium.Support.UI;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
+ 
 //using NunitVideoRecorder;
 
 namespace SeleniumProj
@@ -72,7 +73,47 @@ namespace SeleniumProj
     [TestFixture()]
     public class Falconeri : BaseFalconeri
     {
-        public string fullPath;
+
+        public void TryAndClick(string xpath, int delay)
+        {
+            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(delay);
+            if (driver.FindElements(By.XPath(xpath)).Count > 0)
+            {
+                IWebElement element = driver.FindElement(By.XPath(xpath));
+                element.Click();
+                driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(60);
+            }
+            else
+            {
+                Console.WriteLine("Error while finding element.");
+                driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(60);
+            }
+        }
+
+        public void acceptCookiesButtonOnFalconeri()
+        {
+            var logger = NLog.Web.NLogBuilder.ConfigureNLog("NLog.config").GetCurrentClassLogger();
+            //WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(2));
+            //IWebElement acceptCookies = driver.FindElement(By.XPath(".//*[@id='cc-approve-button-thissite']"));
+            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
+
+            if (driver.FindElements(By.XPath(".//*[@id='cc-approve-button-thissite']")).Count > 0)
+            {
+                IWebElement acceptCookies = driver.FindElement(By.XPath(".//*[@id='cc-approve-button-thissite']"));
+                acceptCookies.Click();
+                logger.Debug("Element found!");
+                driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(60);
+            }
+            else
+            {
+                Console.WriteLine("Error while finding element.");
+                logger.Debug("Element not found!");
+                driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(60);
+            }
+
+        }
+
+
 
         public IWebElement FindElement(By selector, NLog.Logger logger)
         {
@@ -470,7 +511,7 @@ namespace SeleniumProj
             logger.Debug("Login button clicked...");
             
             IWebElement emailField = FindElement(By.XPath(".//*[@id='login-form-email']"), logger);
-            emailField.SendKeys("test121233@yopmail.com");
+            emailField.SendKeys("KTeyGGrWE170@yopmail.com");
             logger.Debug("Email field filled out...");
 
             InsertOrder(csvPath, "012345677777777");
@@ -478,7 +519,7 @@ namespace SeleniumProj
             InsertOrder(csvPath, "012345677777777", "Soldo");
 
             IWebElement passwordField = FindElement(By.XPath(".//*[@id='login-form-password']"), logger);
-            passwordField.SendKeys("Test111?");
+            passwordField.SendKeys("Test??170");
             logger.Debug("Password field filled out...");
 
             IWebElement finalLoginButton = FindElement(By.XPath(".//*[@class='button button-black mobile-extended wide']"), logger);
@@ -604,6 +645,7 @@ namespace SeleniumProj
         [Test()]
         public void Ordering()
         {
+            bool isLoggedIn = false;
             //https://test.falconeri.com/us/product/DAL449A++8521M.html
             var logger = NLog.Web.NLogBuilder.ConfigureNLog("NLog.config").GetCurrentClassLogger();
             IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
@@ -613,162 +655,227 @@ namespace SeleniumProj
             Console.WriteLine(csv[0].Sku);
             Console.WriteLine(csv[0].Options);
 
+            acceptCookiesButtonOnFalconeri(); 
 
-            for(int i = 0; i < 1; i++)
+            IWebElement languageButton = wait.Until(ExpectedConditions.ElementExists(By.XPath(".//*[@id='setInputLocaleCountry']")));
+            languageButton.Click();
+            logger.Debug("Language selected...");
+
+            Thread.Sleep(1000);
+            IWebElement loginButton = wait.Until(ExpectedConditions.ElementExists(By.XPath(".//*[@data-tab='tab-login-cell']")));
+            loginButton.Click();
+            logger.Debug("Login button clicked...");
+
+            IWebElement emailField = FindElement(By.XPath(".//*[@id='login-form-email']"), logger);
+            emailField.SendKeys("KTeyGGrWE170@yopmail.com");
+            logger.Debug("Email field filled out...");
+
+            IWebElement passwordField = FindElement(By.XPath(".//*[@id='login-form-password']"), logger);
+            passwordField.SendKeys("Test??170");
+            logger.Debug("Password field filled out...");
+
+            IWebElement finalLoginButton = FindElement(By.XPath(".//*[@class='button button-black mobile-extended wide']"), logger);
+            finalLoginButton.Click();
+            logger.Debug("Final Login button clicked...");
+            isLoggedIn = true;
+
+
+            for (int i = 0; i < 1; i++)
             {
+                Thread.Sleep(1000);
                 driver.Navigate().GoToUrl($"https://test.falconeri.com/us/product/{csv[i].Sku}++{csv[i].Options}.html");
-                Thread.Sleep(500);
+                Thread.Sleep(1000);
                 IWebElement addToBag = FindElement(By.XPath($".//*[@class='cell auto add-to-cart button button-addtocart']"), logger);
-                Thread.Sleep(500);
+                Thread.Sleep(1000);
                 addToBag.Click();
             }
 
-            Thread.Sleep(500);
+            Thread.Sleep(1000);
             IWebElement bag = FindElement(By.XPath(".//*[@class='button extended uppercase button-black minicart-checkout-button']"), logger);
-            Thread.Sleep(500);
+            Thread.Sleep(1000);
             bag.Click();
 
-            Thread.Sleep(500);
-            IWebElement checkout = FindElement(By.XPath(".//*[@class='button button-black checkout-btn']"), logger);
-            Thread.Sleep(500);
-            checkout.Click();
+            Thread.Sleep(1000);
+            //IWebElement popupForDifferentStore = FindElement(By.XPath(".//*[@id='geoblock-close']"), logger);
+            //Thread.Sleep(1000);
+            //popupForDifferentStore.Click();
+
+            TryAndClick(".//*[@id='geoblock-close']", 5);
+
+            Thread.Sleep(1000);
+            //IWebElement checkout = FindElement(By.XPath(".//*[@class='button button-black checkout-btn']"), logger);
+            //Thread.Sleep(1000);
+            //checkout.Click();
+
+            TryAndClick(".//*[@class='button button-black checkout-btn']", 5);
 
             
-            Thread.Sleep(500);
+            Thread.Sleep(1000);
             IWebElement continueButton = FindElement(By.XPath(".//*[@class='button button-black submit-shipping wide fwidth-padding']"), logger);
-            Thread.Sleep(500);
+            Thread.Sleep(1000);
             continueButton.Click();
 
-            
-            Thread.Sleep(500);
-            IWebElement emailInput = FindElement(By.XPath(".//*[@id='shippingEmail']"), logger);
-            Thread.Sleep(500);
-            emailInput.SendKeys("KTeyGGrWE170@yopmail.com");
-            
-            Thread.Sleep(500);
-            IWebElement numberPrefix = FindElement(By.XPath(".//*[@class='chosen-container chosen-container-single chosen-container-single-nosearch']"), logger);
-            Thread.Sleep(500);
-            numberPrefix.Click();
+            if (!isLoggedIn)
+            {
+                Thread.Sleep(1000);
+                IWebElement emailInput = FindElement(By.XPath(".//*[@id='shippingEmail']"), logger);
+                Thread.Sleep(1000);
+                emailInput.SendKeys("KTeyGGrWE170@yopmail.com");
 
-            Thread.Sleep(500);
-            IWebElement numberSelect = FindElement(By.XPath(".//*[@data-option-array-index='2']"), logger);
-            Thread.Sleep(500);
-            numberSelect.Click();
+                Thread.Sleep(1000);
+                IWebElement numberPrefix = FindElement(By.XPath(".//*[@class='chosen-container chosen-container-single chosen-container-single-nosearch']"), logger);
+                Thread.Sleep(1000);
+                numberPrefix.Click();
 
-            Thread.Sleep(500);
-            IWebElement numberInput = FindElement(By.XPath(".//*[@id='shippingPhoneNumber']"), logger);
-            Thread.Sleep(500);
-            numberInput.SendKeys("123456958");
+                Thread.Sleep(1000);
+                IWebElement numberSelect = FindElement(By.XPath(".//*[@data-option-array-index='2']"), logger);
+                Thread.Sleep(1000);
+                numberSelect.Click();
 
-            Thread.Sleep(500);
-            IWebElement newsButton= FindElement(By.XPath("(.//*[@class='slider round'])[1]"), logger);
-            Thread.Sleep(500);
-            newsButton.Click();
+                Thread.Sleep(1000);
+                IWebElement numberInput = FindElement(By.XPath(".//*[@id='shippingPhoneNumber']"), logger);
+                Thread.Sleep(1000);
+                numberInput.SendKeys("123456958");
 
-            Thread.Sleep(500);
-            IWebElement newsButtonWithProfile = FindElement(By.XPath("(.//*[@class='slider round'])[2]"), logger);
-            Thread.Sleep(500);
-            newsButtonWithProfile.Click();
+                Thread.Sleep(1000);
+                IWebElement newsButton = FindElement(By.XPath("(.//*[@class='slider round'])[1]"), logger);
+                Thread.Sleep(1000);
+                newsButton.Click();
 
-            Thread.Sleep(500);
-            IWebElement firstNameInput = FindElement(By.XPath(".//*[@id='shippingFirstName']"), logger);
-            Thread.Sleep(500);
-            firstNameInput.SendKeys("KTeyG");
+                Thread.Sleep(1000);
+                IWebElement newsButtonWithProfile = FindElement(By.XPath("(.//*[@class='slider round'])[2]"), logger);
+                Thread.Sleep(1000);
+                newsButtonWithProfile.Click();
 
-            Thread.Sleep(500);
-            IWebElement lastNameInput = FindElement(By.XPath(".//*[@id='shippingLastName']"), logger);
-            Thread.Sleep(500);
-            lastNameInput.SendKeys("GrWE");
+                Thread.Sleep(1000);
+                IWebElement firstNameInput = FindElement(By.XPath(".//*[@id='shippingFirstName']"), logger);
+                Thread.Sleep(1000);
+                firstNameInput.SendKeys("KTeyG");
 
-            Thread.Sleep(500);
-            IWebElement addressInput = FindElement(By.XPath(".//*[@id='shippingAddressOne']"), logger);
-            Thread.Sleep(500);
-            addressInput.SendKeys("10447 Kenai Spur Hwy");
-            
-            Thread.Sleep(500);
-            IWebElement addressOtherInfoInput = FindElement(By.XPath(".//*[@id='shippingAddressTwo']"), logger);
-            Thread.Sleep(500);
-            addressOtherInfoInput.SendKeys("Mi 2");
+                Thread.Sleep(1000);
+                IWebElement lastNameInput = FindElement(By.XPath(".//*[@id='shippingLastName']"), logger);
+                Thread.Sleep(1000);
 
-            Thread.Sleep(500);
-            IWebElement townInput = FindElement(By.XPath(".//*[@id='shippingAddressCity']"), logger);
-            Thread.Sleep(500);
-            townInput.SendKeys("Kenai");
+                Thread.Sleep(500);
+                IWebElement addressInput = FindElement(By.XPath(".//*[@id='shippingAddressOne']"), logger);
+                Thread.Sleep(500);
+                addressInput.SendKeys("10447 Kenai Spur Hwy");
 
-            Thread.Sleep(500);
-            IWebElement zipInput = FindElement(By.XPath(".//*[@id='shippingZipCode']"), logger);
-            Thread.Sleep(500);
-            zipInput.SendKeys("99611");
+                Thread.Sleep(500);
+                IWebElement addressOtherInfoInput = FindElement(By.XPath(".//*[@id='shippingAddressTwo']"), logger);
+                Thread.Sleep(500);
+                addressOtherInfoInput.SendKeys("Mi 2");
 
-            Thread.Sleep(500);
-            IWebElement stateButton = FindElement(By.XPath(".//*[@for='shippingState']"), logger);
-            Thread.Sleep(500);
-            stateButton.Click();
+                Thread.Sleep(500);
+                IWebElement townInput = FindElement(By.XPath(".//*[@id='shippingAddressCity']"), logger);
+                Thread.Sleep(500);
+                townInput.SendKeys("Kenai");
 
-            IWebElement stateChoiceButton = FindElement(By.XPath("(.//*[@data-option-array-index='17'])[2]"), logger);
+                Thread.Sleep(500);
+                IWebElement zipInput = FindElement(By.XPath(".//*[@id='shippingZipCode']"), logger);
+                Thread.Sleep(500);
+                zipInput.SendKeys("99611");
+
+                Thread.Sleep(500);
+                IWebElement stateButton = FindElement(By.XPath(".//*[@for='shippingState']"), logger);
+                Thread.Sleep(500);
+                stateButton.Click();
+            }
+
             Actions action = new Actions(driver);
-            action.MoveToElement(stateChoiceButton).Perform();
-            stateChoiceButton.Click();
-
-           
-
+            if (!isLoggedIn)
+            {
+                IWebElement stateChoiceButton = FindElement(By.XPath("(.//*[@data-option-array-index='17'])[2]"), logger);   
+                action.MoveToElement(stateChoiceButton).Perform();
+                Thread.Sleep(2000);
+                stateChoiceButton.Click();
+            }
+            //else
+            //{
+            //    IWebElement stateChoiceButton = FindElement(By.XPath("(.//*[@data-option-array-index='17'])[1]"), logger);
+            //    action.MoveToElement(stateChoiceButton).Perform();
+            //    Thread.Sleep(2000);
+            //    stateChoiceButton.Click();
+            //}
 
             Thread.Sleep(500);
             IWebElement countryButton= FindElement(By.XPath(".//*[@for='shippingCountry']"), logger);
             Thread.Sleep(500);
             countryButton.Click();
 
-            IWebElement countryChoiceButton = FindElement(By.XPath("(.//*[@data-option-array-index='0'])[3]"), logger);
-            action.MoveToElement(countryChoiceButton).Perform();
-            countryChoiceButton.Click();
+            //if (!isLoggedIn)
+            //{
+            //    IWebElement countryChoiceButton = FindElement(By.XPath("(.//*[@data-option-array-index='0'])[3]"), logger);
+            //    action.MoveToElement(countryChoiceButton).Perform();
+            //    countryChoiceButton.Click();
+            //}
+            //else
+            //{
+            //    IWebElement countryChoiceButton = FindElement(By.XPath("(.//*[@data-option-array-index='0'])[2]"), logger);
+            //    action.MoveToElement(countryChoiceButton).Perform();
+            //    countryChoiceButton.Click();
+            //}
 
             IWebElement continueButtonOntoPayment = FindElement(By.XPath(".//*[@name='submit']"), logger);
             continueButtonOntoPayment.Click();
 
-            Thread.Sleep(500);
+            Thread.Sleep(1000);
             IWebElement nameOnCardInput = FindElement(By.XPath(".//*[@id='cardOwner']"), logger);
             nameOnCardInput.SendKeys("Kar");
 
-            Thread.Sleep(500);
+            Thread.Sleep(1000);
             IWebElement cardNumberInput = FindElement(By.XPath(".//*[@id='cardNumber']"), logger);
             cardNumberInput.SendKeys("4775718800002026");
 
             #region Month
-            Thread.Sleep(500);
+            Thread.Sleep(1000);
             IWebElement monthChoice = FindElement(By.XPath(".//*[@for='expirationMonth']"), logger);
-            Thread.Sleep(500);
+            Thread.Sleep(1000);
             monthChoice.Click();
-           
-            IWebElement monthButton = FindElement(By.XPath("(.//*[@data-option-array-index='5'])[3]"), logger);
-           
-            //action.MoveToElement(monthButton).Perform();
-            
-            monthButton.Click();
+
+            if (!isLoggedIn)
+            {
+                IWebElement monthButton = FindElement(By.XPath("(.//*[@data-option-array-index='5'])[2]"), logger);
+                action.MoveToElement(monthButton).Perform();
+                monthButton.Click();
+            }
+            else
+            {
+                IWebElement monthButton = FindElement(By.XPath("(.//*[@data-option-array-index='5'])[1]"), logger);
+                action.MoveToElement(monthButton).Perform();
+                monthButton.Click();
+            }
+
             #endregion
 
             #region Year
-            Thread.Sleep(500);
+
+            Thread.Sleep(1000);
             IWebElement yearChoice = FindElement(By.XPath(".//*[@for='expirationYear']"), logger);
-            Thread.Sleep(500);
+            Thread.Sleep(1000);
             yearChoice.Click();
 
-            IWebElement yearButton = FindElement(By.XPath("(.//*[@data-option-array-index='5'])[4]"), logger);
            
+            IWebElement yearButton = FindElement(By.XPath("(.//*[@data-option-array-index='3'])[2]"), logger);
+            Thread.Sleep(1000);
             yearButton.Click();
+            
+          
+
             #endregion
 
-            Thread.Sleep(500);
+            Thread.Sleep(1000);
             IWebElement cardCVVInput = FindElement(By.XPath(".//*[@id='securityCode']"), logger);
             cardCVVInput.SendKeys("123");
 
-            Thread.Sleep(500);
+            Thread.Sleep(1000);
             IWebElement acceptingTermsButton = FindElement(By.XPath("(.//*[@class='checkbox-input'])[6]"), logger);
-            Thread.Sleep(500);
+            Thread.Sleep(1000);
             acceptingTermsButton.Click();
    
-            Thread.Sleep(500);
+            Thread.Sleep(1000);
             IWebElement sendOrderButton = FindElement(By.XPath("(.//*[@name='submit'])[3]"), logger);
-            Thread.Sleep(500);
+            Thread.Sleep(1000);
             sendOrderButton.Click();
 
             IWebElement orderText = FindElement(By.XPath(".//*[@class='cell order-thank-you-msg h4 side-margins receipt-title']"), logger);
@@ -776,6 +883,11 @@ namespace SeleniumProj
             string str = orderText.Text;
 
             InsertOrder($"C:/Users/GrabusicT/Documents/SeleniumTesting/SeleniumAutomation/SeleniumProj/bin/Debug/orders/orders-{ DateTime.UtcNow.ToFileTime()}.csv",GetOrderNumber(str), "Soldato");
+
+            IWebElement PasswordInput = driver.FindElement(By.XPath(".//*[@id='login-form-password']"));
+            PasswordInput.SendKeys("Test??170");
+
+
 
             logger.Debug("Test finished!");
             NLog.LogManager.Shutdown();
