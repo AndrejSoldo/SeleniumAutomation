@@ -1,0 +1,15 @@
+2021-11-02 08:21:25.6892|DEBUG|SeleniumProj.Falconeri|Language selected...
+2021-11-02 08:23:12.1132|FATAL|SeleniumProj.Falconeri|Exception: OpenQA.Selenium.WebDriverException: The HTTP request to the remote WebDriver server for URL http://localhost:58577/session/3f90080281b12ecb0f9b56beb54257fe/element timed out after 60 seconds. ---> System.Net.WebException: The request was aborted: The operation has timed out.
+   at System.Net.HttpWebRequest.GetResponse()
+   at OpenQA.Selenium.Remote.HttpCommandExecutor.MakeHttpRequest(HttpRequestInfo requestInfo)
+   --- End of inner exception stack trace ---
+   at OpenQA.Selenium.Remote.HttpCommandExecutor.MakeHttpRequest(HttpRequestInfo requestInfo)
+   at OpenQA.Selenium.Remote.HttpCommandExecutor.Execute(Command commandToExecute)
+   at OpenQA.Selenium.Remote.DriverServiceCommandExecutor.Execute(Command commandToExecute)
+   at OpenQA.Selenium.Remote.RemoteWebDriver.Execute(String driverCommandToExecute, Dictionary`2 parameters)
+   at OpenQA.Selenium.Remote.RemoteWebDriver.FindElement(String mechanism, String value)
+   at OpenQA.Selenium.Remote.RemoteWebDriver.FindElementByXPath(String xpath)
+   at OpenQA.Selenium.By.<>c__DisplayClass19_0.<XPath>b__0(ISearchContext context)
+   at OpenQA.Selenium.By.FindElement(ISearchContext context)
+   at OpenQA.Selenium.Remote.RemoteWebDriver.FindElement(By by)
+   at SeleniumProj.Falconeri.FindElement(By selector, Logger logger) in C:\Users\GrabusicT\Documents\SeleniumTesting\SeleniumAutomation\SeleniumProj\Falconeri.cs:line 126

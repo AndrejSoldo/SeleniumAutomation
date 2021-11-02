@@ -1433,6 +1433,7 @@ namespace SeleniumProj
         [Test()]
         public void OrderingWithPayPal()
         {
+            bool isLoggedIn = true; 
             Actions action = new Actions(driver);
             //https://test.falconeri.com/us/product/DAL449A++8521M.html
             var logger = NLog.Web.NLogBuilder.ConfigureNLog("NLog.config").GetCurrentClassLogger();
@@ -1634,6 +1635,7 @@ namespace SeleniumProj
 
             Thread.Sleep(1000);
             driver.SwitchTo().Window(driver.WindowHandles.Last());
+            driver.Manage().Window.Maximize();
             Thread.Sleep(1000);
 
             #region PayPalEmail
@@ -1652,10 +1654,86 @@ namespace SeleniumProj
 
             #region LoginToPaypal 
             Thread.Sleep(1000);
-            IWebElement loginToPaypal = FindElement(By.XPath(".//*[@id='password']"), logger);
-            payPalPassword.SendKeys("test$prova");
+            IWebElement loginToPaypal = FindElement(By.XPath(".//*[@id='btnLogin']"), logger);
+            loginToPaypal.Click();
             #endregion
 
+            #region AcceptingCookies
+            Thread.Sleep(2000);
+            IWebElement acceptingCookies = FindElement(By.XPath(".//*[@id='acceptAllButton']"), logger);
+            acceptingCookies.Click();
+            #endregion
+
+            #region ContinueOnPaypal
+            Thread.Sleep(1000);
+            IWebElement continueButtonOnPaypal = FindElement(By.XPath(".//*[@id='payment-submit-btn']"), logger);
+            IWebElement downButton = FindElement(By.XPath(".//*[@class='CancelLink_container_27tB8 Hermione_cancelLink_2UjcA']"), logger);
+            action.MoveToElement(downButton);
+            Thread.Sleep(4000);
+            continueButtonOnPaypal.Click();
+            #endregion
+
+            driver.SwitchTo().Window(driver.WindowHandles.First());
+
+            #region NumberPrefixSecondClicked
+            Thread.Sleep(2000);
+            IWebElement numberPrefixSecond = FindElement(By.XPath("(.//*[@class='chosen-container chosen-container-single chosen-container-single-nosearch'])[1]"), logger);
+            Thread.Sleep(1000);
+            numberPrefixSecond.Click();
+            #endregion
+
+            #region NumberPrefixSecondChoosen
+            Thread.Sleep(1000);
+            IWebElement numberSelectSecond = FindElement(By.XPath(".//*[@data-option-array-index='2']"), logger);
+            Thread.Sleep(1000);
+            numberSelectSecond.Click();
+            #endregion
+
+            #region NumberInput
+            Thread.Sleep(1000);
+            IWebElement numberInputSecond = FindElement(By.XPath(".//*[@class='shippingPhoneNumber']"), logger);
+            Thread.Sleep(1000);
+            numberInputSecond.SendKeys("123456958");
+            Thread.Sleep(1000);
+            #endregion
+
+            #region ContinueToPayment
+            IWebElement continueButtonToPay = FindElement(By.XPath(".//*[@value='submit-shipping']"), logger);
+            Thread.Sleep(3000);
+            continueButtonToPay.Click();
+            #endregion
+
+            #region FinalButtonOnOrdering
+            Thread.Sleep(1000);
+            IWebElement sendOrderButton = FindElement(By.XPath(".//*[@class='button button-black wide submit-payment fwidth-padding']"), logger);
+            Thread.Sleep(1000);
+            sendOrderButton.Click();
+            #endregion
+
+            #region Login 
+
+            if (isLoggedIn)
+            {
+                #region PasswordForLogin
+                IWebElement passwordForLogin = FindElement(By.XPath("(.//*[@name='loginPassword'])[2]"), logger);
+                Thread.Sleep(1000);
+                passwordForLogin.SendKeys("Test??170");
+                #endregion
+
+                #region LoginClicked
+                IWebElement loginButton = FindElement(By.XPath(".//*[@id='login']"), logger);
+                Thread.Sleep(1000);
+                loginButton.Click();
+                #endregion
+            }
+
+            #endregion
+
+            #region TestPassed
+            logger.Debug("Test finished!");
+            NLog.LogManager.Shutdown();
+            Assert.Pass("Falconeri testing");
+            #endregion
         }
 
     }
