@@ -225,6 +225,23 @@ namespace SeleniumProj
             }
         }
 
+        public void InsertOrder(string csvp, string orderNum, string lastName, string paymentMethod)
+        {
+            using (var stream = File.Open(csvp, FileMode.Append))
+            {
+                using (var streamWriter = new StreamWriter(stream))
+                {
+                    using (var csvWriter = new CsvWriter(streamWriter, new CsvConfiguration(CultureInfo.InvariantCulture) { HasHeaderRecord = false, Delimiter = ";" }))
+                    {
+                        //var orders = Orders.GetOrders();
+                        //csvWriter.WriteRecords(orders);
+                        var order = Orders.AddOrder(orderNum, lastName, paymentMethod);
+                        csvWriter.WriteRecords(order);
+                    }
+                }
+            }
+        }
+
         public List<Users> InitializeUsersCSV(string path, string delimiter)
         {
             var config = new CsvConfiguration(CultureInfo.InvariantCulture)
@@ -1401,7 +1418,7 @@ namespace SeleniumProj
 
             IWebElement orderText = FindElement(By.XPath(".//*[@class='cell order-thank-you-msg h4 side-margins receipt-title']"), logger);
             string str = orderText.Text;
-            InsertOrder($"C:/Users/GrabusicT/Documents/SeleniumTesting/SeleniumAutomation/SeleniumProj/bin/Debug/orders/orders-{ DateTime.UtcNow.ToFileTime()}.csv", GetOrderNumber(str), "Soldato");
+            InsertOrder($"C:/Users/GrabusicT/Documents/SeleniumTesting/SeleniumAutomation/SeleniumProj/bin/Debug/orders/creditcard/orders-creditcard-{ DateTime.UtcNow.ToFileTime()}.csv", GetOrderNumber(str), "Soldato", "Credit card");
             #endregion
 
             #region Login 
@@ -1678,14 +1695,14 @@ namespace SeleniumProj
             #region NumberPrefixSecondClicked
             Thread.Sleep(2000);
             IWebElement numberPrefixSecond = FindElement(By.XPath("(.//*[@class='chosen-container chosen-container-single chosen-container-single-nosearch'])[1]"), logger);
-            Thread.Sleep(1000);
+            Thread.Sleep(2000);
             numberPrefixSecond.Click();
             #endregion
 
             #region NumberPrefixSecondChoosen
             Thread.Sleep(1000);
             IWebElement numberSelectSecond = FindElement(By.XPath(".//*[@data-option-array-index='2']"), logger);
-            Thread.Sleep(1000);
+            Thread.Sleep(2000);
             numberSelectSecond.Click();
             #endregion
 
@@ -1727,6 +1744,14 @@ namespace SeleniumProj
                 #endregion
             }
 
+            #endregion
+
+
+            #region SavingOrderInfo
+
+            IWebElement orderText = FindElement(By.XPath(".//*[@class='cell order-thank-you-msg h4 side-margins receipt-title']"), logger);
+            string str = orderText.Text;
+            InsertOrder($"C:/Users/GrabusicT/Documents/SeleniumTesting/SeleniumAutomation/SeleniumProj/bin/Debug/orders/paypal/orders-paypal-{ DateTime.UtcNow.ToFileTime()}.csv", GetOrderNumber(str), "Soldato","PayPal");
             #endregion
 
             #region TestPassed
