@@ -11,7 +11,6 @@ namespace SeleniumProj.CsvTemplates
         //public string OrderId { get; set; }
         public string OrderNumber { get; set; }
         public DateTime OrderDate { get; set; }
-
         public string LastName { get; set; }
         //public List<Orders> OrderList { get; set; }
 

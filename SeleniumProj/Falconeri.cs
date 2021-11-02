@@ -48,6 +48,9 @@ namespace SeleniumProj
         public string Id { get; set; }
         public string Name { get; set; }
         public string LastName { get; set; }
+        public string[] Products { get; set; }
+        public List<string> Locales { get; set; }
+        public IDictionary<string, string> ObjectHolder { get; set; }
 
     }
 
@@ -917,18 +920,52 @@ namespace SeleniumProj
                 LastName = "Soldo"
             };
 
+
+
             string jsonSoldo = JsonSerializer.Serialize(soldoJson);
             Console.WriteLine(jsonSoldo);
+
+
 
             SoldoJson jsonDeserialize = JsonSerializer.Deserialize<SoldoJson>(jsonSoldo);
             Console.WriteLine(jsonDeserialize.Id);
             Console.WriteLine(jsonDeserialize.Name);
             Console.WriteLine(jsonDeserialize.LastName);
 
+
+
             //Loaded data from a file
+
+
+
+            SoldoJson desJson = InitializeJson("soldoJson.json");
+
+
+
+            Console.WriteLine(desJson.Name);
             Console.WriteLine(InitializeJson("soldoJson.json").Id);
             Console.WriteLine(InitializeJson("soldoJson.json").Name);
             Console.WriteLine(InitializeJson("soldoJson.json").LastName);
+            Console.WriteLine(InitializeJson("soldoJson.json").Products[0]);
+            Console.WriteLine(InitializeJson("soldoJson.json").Locales[0]);
+            Console.WriteLine(InitializeJson("soldoJson.json").ObjectHolder["id"]);
+            Console.WriteLine(InitializeJson("soldoJson.json").ObjectHolder["name"]);
+
+
+
+            string newJson = JsonSerializer.Serialize(InitializeJson("soldoJson.json"));
+            Console.WriteLine(newJson);
+            Console.WriteLine("#---------------#");
+            JsonDocument doc = JsonDocument.Parse(newJson);
+            JsonElement root = doc.RootElement;
+
+
+
+            Console.WriteLine(root);
+
+
+
+            Console.WriteLine(root.GetProperty("Products")[2]);
         }
 
         [Test()]

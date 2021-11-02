@@ -159,7 +159,6 @@
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="Capture.js" />
-    <None Include="tempUserData.json" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

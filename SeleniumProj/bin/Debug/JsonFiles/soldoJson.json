@@ -1,5 +1,11 @@
 {
-  "Id": "1",
-  "Name": "Andrejjj",
-  "LastName": "Soldooo"
+    "Id": "1",
+    "Name": "Andrejjj",
+    "LastName": "Soldooo",
+    "Products": [ "Product1", "Product2", "Product3" ],
+    "Locales": [ "Hr", "En", "De" ],
+    "ObjectHolder": {
+        "id": "ObjectHolderId",
+        "name": "Mr. Real ObjectHolder"
+    }
 }
