@@ -1159,7 +1159,7 @@ namespace SeleniumProj
         public string GetOrderNumber(string text)
         {
             // Create a pattern for a word that starts with letter "M"  
-            string pattern = @"[A-Z a-z !]+";
+            string pattern = @"[A-Z a-z ü !]+";
             string orderText = text;
             //"Thank you for your order 123213213213!"
 
@@ -1931,6 +1931,7 @@ namespace SeleniumProj
         [Test()]
         public void OrderingWithPayPalExsp()
         {
+            #region Init
             bool isLoggedIn = true;
             Actions action = new Actions(driver);
             //https://test.falconeri.com/us/product/DAL449A++8521M.html
@@ -1938,207 +1939,223 @@ namespace SeleniumProj
             IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
             var csv = InitializeOrderInfoCSV("C:/Users/GrabusicT/Documents/SeleniumTesting/SeleniumAutomation/SeleniumProj/bin/Debug/orderingCsv/orderInfo.csv", ";");
             WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(60));
-
-            #region LogingScreenFindElements
-            IWebElement languageButton = wait.Until(ExpectedConditions.ElementExists(By.XPath(".//*[@id='setInputLocaleCountry']")));
             #endregion
-
-            #region LogingScreenClick
-            languageButton.Click();
-            logger.Debug("Language selected...");
-            #endregion
-
-            #region AddingProductsToBag
-
-            Thread.Sleep(1000);
-            for (int i = 0; i < 1; i++)
+            string[] locales = new string[] { "us", "de"};
+            for (int i = 0; i < locales.Length; i++)
             {
-                driver.Navigate().GoToUrl($"https://test.falconeri.com/us/product/{csv[i].Sku}++{csv[i].Options}.html");
-                #region FindElementInProducts
-                IWebElement addToBag = FindElement(By.XPath($".//*[@class='cell auto add-to-cart button button-addtocart']"), logger);
+                if (i == 0)
+                {
+                    #region LogingScreenFindElements
+                    IWebElement languageButton = wait.Until(ExpectedConditions.ElementExists(By.XPath(".//*[@id='setInputLocaleCountry']")));
+                    #endregion
+
+                    #region LogingScreenClick
+                    languageButton.Click();
+                    logger.Debug("Language selected...");
+                    #endregion
+                }
+
+                #region AddingProductsToBag
+
+                for (int j = 0; j < 1; j++)
+                {
+                    Thread.Sleep(1000);
+                    driver.Navigate().GoToUrl($"https://test.falconeri.com/{locales[i]}/product/{csv[j].Sku}++{csv[j].Options}.html");
+                    #region FindElementInProducts
+                    IWebElement addToBag = FindElement(By.XPath($".//*[@class='cell auto add-to-cart button button-addtocart']"), logger);
+                    #endregion
+
+                    #region ClickElementInProducts
+                    addToBag.Click();
+                    #endregion
+                }
+
                 #endregion
 
-                #region ClickElementInProducts
-                addToBag.Click();
+                #region FindElementShoppingBag
+                IWebElement bag = FindElement(By.XPath(".//*[@class='button extended uppercase button-black minicart-checkout-button']"), logger);
                 #endregion
+
+                #region ClickingElementShoppingBag
+                bag.Click();
+                #endregion
+
+                //#region FindAndClickPopUp
+                //TryAndClick(".//*[@id='geoblock-close']", 10);
+                //#endregion
+
+                #region FindElementContinueToCheckOut
+                IWebElement checkout = FindElement(By.XPath(".//*[@class='button button-black checkout-btn']"), logger);
+                #endregion
+
+                #region ClickElementContinueToCheckOut
+                checkout.Click();
+                #endregion
+
+                #region FindContinueToShippingMethod
+                //IWebElement continueButton = FindElement(By.XPath(".//*[@class='button button-black submit-shipping wide fwidth-padding']"), logger);
+                //Thread.Sleep(1000);
+                TryAndClick(".//*[@class='button button-black submit-shipping wide fwidth-padding']", 10);
+                #endregion
+
+                #region ClickContinueToShippingMethod
+                //continueButton.Click();
+
+                #endregion
+
+                #region FindElementsFirstScreen
+                IWebElement emailInput = FindElement(By.XPath(".//*[@id='shippingEmail']"), logger);
+                IWebElement numberInput = FindElement(By.XPath(".//*[@id='shippingPhoneNumber']"), logger);
+                IWebElement newsButton = FindElement(By.XPath("(.//*[@class='slider round'])[1]"), logger);
+                IWebElement newsButtonWithProfile = FindElement(By.XPath("(.//*[@class='slider round'])[2]"), logger);
+                IWebElement firstNameInput = FindElement(By.XPath(".//*[@id='shippingFirstName']"), logger);
+                IWebElement lastNameInput = FindElement(By.XPath(".//*[@id='shippingLastName']"), logger);
+                IWebElement addressInput = FindElement(By.XPath(".//*[@id='shippingAddressOne']"), logger);
+                IWebElement addressOtherInfoInput = FindElement(By.XPath(".//*[@id='shippingAddressTwo']"), logger);
+                IWebElement townInput = FindElement(By.XPath(".//*[@id='shippingAddressCity']"), logger);
+                IWebElement zipInput = FindElement(By.XPath(".//*[@id='shippingZipCode']"), logger);
+                IWebElement continueButtonOntoPayment = FindElement(By.XPath(".//*[@name='submit']"), logger);
+
+                #endregion
+
+                #region ClickingAndSendingKeysFirstScreen
+                emailInput.SendKeys("KTeyGGrWE170@yopmail.com");
+                IWebElement numberPrefix = FindElement(By.XPath(".//*[@class='chosen-container chosen-container-single chosen-container-single-nosearch']"), logger);
+                numberPrefix.Click();
+                IWebElement numberSelect = FindElement(By.XPath(".//*[@data-option-array-index='2']"), logger);
+                numberSelect.Click();
+                numberInput.SendKeys("123456958");
+                newsButton.Click();
+                newsButtonWithProfile.Click();
+                firstNameInput.SendKeys("KTeyG");
+                lastNameInput.SendKeys("KTeyG");
+                addressInput.SendKeys("10447 Kenai Spur Hwy");
+                addressOtherInfoInput.SendKeys("Mi 2");
+                townInput.SendKeys("Kenai");
+                zipInput.SendKeys("99611");
+                IWebElement stateButton = FindElement(By.XPath(".//*[@id='shippingState_chosen']"), logger);
+                stateButton.Click();
+                IWebElement stateChoiceButton = FindElement(By.XPath("(.//*[@data-option-array-index='2'])[2]"), logger);
+                stateChoiceButton.Click();
+                IWebElement countryButton = FindElement(By.XPath(".//*[@for='shippingCountry']"), logger);
+                countryButton.Click();
+                IWebElement countryChoiceButton = FindElement(By.XPath("(.//*[@data-option-array-index='0'])[3]"), logger);
+                countryChoiceButton.Click();
+                continueButtonOntoPayment.Click();
+                #endregion
+
+                #region FindPayPal
+                IWebElement paypalButton = FindElement(By.XPath(".//label[@for='PayPal']/span[@class='radio-input']"), logger);
+                #endregion
+
+                #region ClickPaypal
+                paypalButton.Click();
+                #endregion
+
+                #region FindElementsInPayPal
+                //IWebElement acceptingTermsButton = FindElement(By.XPath("(.//*[@class='checkbox-input'])[7]"), logger);
+                #endregion
+
+                #region ClickElementsInPayPal
+                //acceptingTermsButton.Click();
+                //IWebElement payButton = FindElement(By.XPath(".//*[@class='paypal-checkout-button js_paypal_button_on_billing_form']"), logger);
+                //payButton.Click();
+                Thread.Sleep(500);
+                TryAndClick("(.//*[@class='checkbox-input'])[7]", 15);
+                TryAndClick(".//*[@class='paypal-checkout-button js_paypal_button_on_billing_form']", 15);
+                #endregion
+
+                driver.SwitchTo().Window(driver.WindowHandles.Last());
+                driver.Manage().Window.Maximize();
+                Thread.Sleep(1000);
+
+                if (i == 0)
+                {
+                    #region FindElementsThirdScreen
+                    IWebElement payPalEmail = FindElement(By.XPath(".//*[@id='email']"), logger);
+                    IWebElement payPalPassword = FindElement(By.XPath(".//*[@id='password']"), logger);
+                    IWebElement loginToPaypal = FindElement(By.XPath(".//*[@id='btnLogin']"), logger);
+                    #endregion
+
+                    #region ClickingAndSendingKeysThirdScreen
+                    payPalEmail.Clear();
+                    payPalEmail.SendKeys("calzedonia.test@calzedonia.it");
+                    payPalPassword.SendKeys("test$prova");
+                    loginToPaypal.Click();
+                    #endregion
+                }
+               
+                #region FindElementsForthScreen
+                //IWebElement acceptingCookies = FindElement(By.XPath(".//*[@id='acceptAllButton']"), logger);
+                #endregion
+
+                #region ClickingForthScreen
+                //acceptingCookies.Click();
+                TryAndClick(".//*[@id='acceptAllButton']", 10);
+                IWebElement continueButtonOnPaypal = FindElement(By.XPath(".//*[@id='payment-submit-btn']"), logger);
+                continueButtonOnPaypal.Click();
+                #endregion
+
+                driver.SwitchTo().Window(driver.WindowHandles.First());
+
+                if (i == 0)
+                {
+                    #region FindElementsFifthScreen
+                    IWebElement numberInputSecond = FindElement(By.XPath(".//*[@class='shippingPhoneNumber']"), logger);
+                    IWebElement continueButtonToPay = FindElement(By.XPath(".//*[@value='submit-shipping']"), logger);
+                    #endregion
+
+                    #region ClickingAndSendingKeysFifthScreen
+                    IWebElement numberPrefixSecond = FindElement(By.XPath("(.//*[@class='chosen-container chosen-container-single chosen-container-single-nosearch'])[1]"), logger);
+                    numberPrefixSecond.Click();
+                    Thread.Sleep(500);
+                    IWebElement numberSelectSecond = FindElement(By.XPath(".//*[@data-option-array-index='2']"), logger);
+                    numberSelectSecond.Click();
+                    numberInputSecond.SendKeys("123456958");
+                    continueButtonToPay.Click();
+                    #endregion
+
+                    #region FindElementForFinalizingOrder
+                    IWebElement sendOrderButton = FindElement(By.XPath(".//*[@class='button button-black wide submit-payment fwidth-padding']"), logger);
+                    #endregion
+
+                    #region ClickElementForFinalizingOrder
+                    sendOrderButton.Click();
+                    #endregion
+                }
+
+                #region Login 
+                
+                if (isLoggedIn)
+                {
+                    #region FindElementsFinalScreen
+                    IWebElement passwordForLogin = FindElement(By.XPath("(.//*[@name='loginPassword'])[2]"), logger);
+                    IWebElement loginButton = FindElement(By.XPath(".//*[@id='login']"), logger);
+                    #endregion
+
+                    #region ClickingAndSendingKeysFinalScreen
+                    passwordForLogin.SendKeys("Test??170");
+                    loginButton.Click();
+
+                    #endregion
+                }
+
+                #endregion
+
+
+                #region SavingOrderInfo
+
+                IWebElement orderText = FindElement(By.XPath(".//*[@class='cell order-thank-you-msg h4 side-margins receipt-title']"), logger);
+                string str = orderText.Text;
+                InsertOrder($"C:/Users/GrabusicT/Documents/SeleniumTesting/SeleniumAutomation/SeleniumProj/bin/Debug/orders/paypal/orders-paypal-{ DateTime.UtcNow.ToFileTime()}.csv", GetOrderNumber(str), "Soldato", "PayPal");
+                #endregion
+
             }
-
-            #endregion
-
-            #region FindElementShoppingBag
-            IWebElement bag = FindElement(By.XPath(".//*[@class='button extended uppercase button-black minicart-checkout-button']"), logger);
-            #endregion
-
-            #region ClickingElementShoppingBag
-            bag.Click();
-            #endregion
-
-            #region FindAndClickPopUp
-            TryAndClick(".//*[@id='geoblock-close']", 2);
-            #endregion
-
-            #region FindElementContinueToCheckOut
-            IWebElement checkout = FindElement(By.XPath(".//*[@class='button button-black checkout-btn']"), logger);
-            #endregion
-
-            #region ClickElementContinueToCheckOut
-            checkout.Click();
-            #endregion
-
-            #region FindContinueToShippingMethod
-            //IWebElement continueButton = FindElement(By.XPath(".//*[@class='button button-black submit-shipping wide fwidth-padding']"), logger);
-            //Thread.Sleep(1000);
-            TryAndClick(".//*[@class='button button-black submit-shipping wide fwidth-padding']", 5);
-            #endregion
-
-            #region ClickContinueToShippingMethod
-            //continueButton.Click();
-            
-            #endregion
-
-            #region FindElementsFirstScreen
-            IWebElement emailInput = FindElement(By.XPath(".//*[@id='shippingEmail']"), logger);
-            IWebElement numberInput = FindElement(By.XPath(".//*[@id='shippingPhoneNumber']"), logger);
-            IWebElement newsButton = FindElement(By.XPath("(.//*[@class='slider round'])[1]"), logger);
-            IWebElement newsButtonWithProfile = FindElement(By.XPath("(.//*[@class='slider round'])[2]"), logger);
-            IWebElement firstNameInput = FindElement(By.XPath(".//*[@id='shippingFirstName']"), logger);
-            IWebElement lastNameInput = FindElement(By.XPath(".//*[@id='shippingLastName']"), logger);
-            IWebElement addressInput = FindElement(By.XPath(".//*[@id='shippingAddressOne']"), logger);
-            IWebElement addressOtherInfoInput = FindElement(By.XPath(".//*[@id='shippingAddressTwo']"), logger);
-            IWebElement townInput = FindElement(By.XPath(".//*[@id='shippingAddressCity']"), logger);
-            IWebElement zipInput = FindElement(By.XPath(".//*[@id='shippingZipCode']"), logger);
-            IWebElement continueButtonOntoPayment = FindElement(By.XPath(".//*[@name='submit']"), logger);
-
-            #endregion
-
-            #region ClickingAndSendingKeysFirstScreen
-            emailInput.SendKeys("KTeyGGrWE170@yopmail.com");
-            IWebElement numberPrefix = FindElement(By.XPath(".//*[@class='chosen-container chosen-container-single chosen-container-single-nosearch']"), logger);
-            numberPrefix.Click();
-            IWebElement numberSelect = FindElement(By.XPath(".//*[@data-option-array-index='2']"), logger);
-            numberSelect.Click();
-            numberInput.SendKeys("123456958");
-            newsButton.Click();
-            newsButtonWithProfile.Click();
-            firstNameInput.SendKeys("KTeyG");
-            lastNameInput.SendKeys("KTeyG");
-            addressInput.SendKeys("10447 Kenai Spur Hwy");
-            addressOtherInfoInput.SendKeys("Mi 2");
-            townInput.SendKeys("Kenai");
-            zipInput.SendKeys("99611");
-            IWebElement stateButton = FindElement(By.XPath(".//*[@id='shippingState_chosen']"), logger);
-            stateButton.Click();
-            IWebElement stateChoiceButton = FindElement(By.XPath("(.//*[@data-option-array-index='2'])[2]"), logger);
-            stateChoiceButton.Click();
-            IWebElement countryButton = FindElement(By.XPath(".//*[@for='shippingCountry']"), logger);
-            countryButton.Click();
-            IWebElement countryChoiceButton = FindElement(By.XPath("(.//*[@data-option-array-index='0'])[3]"), logger);
-            countryChoiceButton.Click();
-            continueButtonOntoPayment.Click();
-            #endregion
-
-            #region FindPayPal
-            IWebElement paypalButton = FindElement(By.XPath("(.//*[@class='radio-input'])[12]"), logger);
-            #endregion
-
-            #region ClickPaypal
-            paypalButton.Click();
-            #endregion
-
-            #region FindElementsInPayPal
-            IWebElement acceptingTermsButton = FindElement(By.XPath("(.//*[@class='checkbox-input'])[7]"), logger);
-            #endregion
-
-            #region ClickElementsInPayPal
-            acceptingTermsButton.Click();
-            IWebElement payButton = FindElement(By.XPath(".//*[@class='paypal-checkout-button js_paypal_button_on_billing_form']"), logger);
-            payButton.Click();
-            #endregion
-           
-            driver.SwitchTo().Window(driver.WindowHandles.Last());
-            driver.Manage().Window.Maximize();
-            Thread.Sleep(1000);
-
-            #region FindElementsThirdScreen
-            IWebElement payPalEmail = FindElement(By.XPath(".//*[@id='email']"), logger);
-            IWebElement payPalPassword = FindElement(By.XPath(".//*[@id='password']"), logger);
-            IWebElement loginToPaypal = FindElement(By.XPath(".//*[@id='btnLogin']"), logger);
-            #endregion
-
-            #region ClickingAndSendingKeysThirdScreen
-            payPalEmail.Clear();
-            payPalEmail.SendKeys("calzedonia.test@calzedonia.it");
-            payPalPassword.SendKeys("test$prova");
-            loginToPaypal.Click();
-            #endregion
-
-            #region FindElementsForthScreen
-            IWebElement acceptingCookies = FindElement(By.XPath(".//*[@id='acceptAllButton']"), logger);
-            #endregion
-
-            #region ClickingForthScreen
-            acceptingCookies.Click();
-            Thread.Sleep(500);
-            IWebElement continueButtonOnPaypal = FindElement(By.XPath(".//*[@id='payment-submit-btn']"), logger);
-            continueButtonOnPaypal.Click();
-            #endregion
-
-            driver.SwitchTo().Window(driver.WindowHandles.First());
-
-            #region FindElementsFifthScreen
-            IWebElement numberInputSecond = FindElement(By.XPath(".//*[@class='shippingPhoneNumber']"), logger);
-            IWebElement continueButtonToPay = FindElement(By.XPath(".//*[@value='submit-shipping']"), logger);
-            #endregion
-
-            #region ClickingAndSendingKeysFifthScreen
-            IWebElement numberPrefixSecond = FindElement(By.XPath("(.//*[@class='chosen-container chosen-container-single chosen-container-single-nosearch'])[1]"), logger);
-            numberPrefixSecond.Click();
-            Thread.Sleep(500);
-            IWebElement numberSelectSecond = FindElement(By.XPath(".//*[@data-option-array-index='2']"), logger);
-            numberSelectSecond.Click();
-            numberInputSecond.SendKeys("123456958");
-            continueButtonToPay.Click();
-            #endregion
-
-            #region FindElementForFinalizingOrder
-            IWebElement sendOrderButton = FindElement(By.XPath(".//*[@class='button button-black wide submit-payment fwidth-padding']"), logger);
-            #endregion
-
-            #region ClickElementForFinalizingOrder
-            sendOrderButton.Click();
-            #endregion
-
-            #region Login 
-
-            if (isLoggedIn)
-            {
-                #region FindElementsFinalScreen
-                IWebElement passwordForLogin = FindElement(By.XPath("(.//*[@name='loginPassword'])[2]"), logger);
-                IWebElement loginButton = FindElement(By.XPath(".//*[@id='login']"), logger);
+                #region TestPassed
+                logger.Debug("Test finished!");
+                NLog.LogManager.Shutdown();
+                Assert.Pass("Falconeri testing");
                 #endregion
-
-                #region ClickingAndSendingKeysFinalScreen
-                passwordForLogin.SendKeys("Test??170");
-                loginButton.Click();
-
-                #endregion
-            }
-
-            #endregion
-
-
-            #region SavingOrderInfo
-
-            IWebElement orderText = FindElement(By.XPath(".//*[@class='cell order-thank-you-msg h4 side-margins receipt-title']"), logger);
-            string str = orderText.Text;
-            InsertOrder($"C:/Users/GrabusicT/Documents/SeleniumTesting/SeleniumAutomation/SeleniumProj/bin/Debug/orders/paypal/orders-paypal-{ DateTime.UtcNow.ToFileTime()}.csv", GetOrderNumber(str), "Soldato", "PayPal");
-            #endregion
-
-            #region TestPassed
-            logger.Debug("Test finished!");
-            NLog.LogManager.Shutdown();
-            Assert.Pass("Falconeri testing");
-            #endregion
         }
     }
 }
