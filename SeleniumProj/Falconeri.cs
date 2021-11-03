@@ -184,21 +184,21 @@ namespace SeleniumProj
 
         public SoldoJson InitializeJson(string name)
         {
-            StreamReader fstream = new StreamReader("JsonFiles/"+name);
-            
+            StreamReader fstream = new StreamReader("JsonFiles/" + name);
+
 
             var myjson = JsonSerializer.Deserialize<SoldoJson>(fstream.ReadToEnd(), new JsonSerializerOptions { Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping });
 
             return myjson;
         }
 
-        public void InsertOrder(string csvp ,string orderNum)
+        public void InsertOrder(string csvp, string orderNum)
         {
             using (var stream = File.Open(csvp, FileMode.Append))
             {
                 using (var streamWriter = new StreamWriter(stream))
                 {
-                    using (var csvWriter = new CsvWriter(streamWriter, new CsvConfiguration(CultureInfo.InvariantCulture) { HasHeaderRecord = false , Delimiter = ";"}))
+                    using (var csvWriter = new CsvWriter(streamWriter, new CsvConfiguration(CultureInfo.InvariantCulture) { HasHeaderRecord = false, Delimiter = ";" }))
                     {
                         //var orders = Orders.GetOrders();
                         //csvWriter.WriteRecords(orders);
@@ -265,12 +265,12 @@ namespace SeleniumProj
         public void EditProfile()
         {
             var logger = NLog.Web.NLogBuilder.ConfigureNLog("NLog.config").GetCurrentClassLogger();
-          
+
             IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
 
             //js.ExecuteScript("console.clear();");
             //js.ExecuteScript("async function recordScreen(){return await navigator.mediaDevices.getDisplayMedia({audio:true,video:{mediaSource:'screen'}})}function createRecorder(stream,mimeType){let recordedChunks=[];const mediaRecorder=new MediaRecorder(stream);mediaRecorder.ondataavailable=function(e){if(e.data.size>0){recordedChunks.push(e.data)}};mediaRecorder.onstop=function(){saveFile(recordedChunks);recordedChunks=[]};mediaRecorder.start(200);return mediaRecorder}function saveFile(recordedChunks){const blob=new Blob(recordedChunks,{type:'video/webm'});let filename='Soldo',downloadLink=document.createElement('a');downloadLink.href=URL.createObjectURL(blob);downloadLink.download=`${filename}.webm`;document.body.appendChild(downloadLink);downloadLink.click();URL.revokeObjectURL(blob);document.body.removeChild(downloadLink)}let stream=await recordScreen();let mimeType='video/webm';let mediaRecorder=createRecorder(stream,mimeType);");
-            js.ExecuteScript("console.log(new Date(), 'Test Started');") ;
+            js.ExecuteScript("console.log(new Date(), 'Test Started');");
 
             //driver.SwitchTo().ActiveElement().Click();
             //driver.SwitchTo().Alert().Accept();
@@ -285,7 +285,7 @@ namespace SeleniumProj
             //logger.Debug("-----------------------");
             logger.Debug("Test started...");
             Thread.Sleep(1000);
-            
+
 
             //Actions action = new Actions(driver);
             //action.MoveToElement(selectButton).Perform(); // move to the button
@@ -317,15 +317,15 @@ namespace SeleniumProj
             Console.WriteLine(LoginButton);
             LoginButton.Click();
             logger.Debug("Loging in...");
-            
+
 
             //try
             //{
-               // driver.Navigate().GoToUrl("https://test.falconeri.com/us/myprofile/");
+            // driver.Navigate().GoToUrl("https://test.falconeri.com/us/myprofile/");
             //}
             //finally
             //{
-                //driver.Quit();
+            //driver.Quit();
             //}
 
             //Thread.Sleep(3000);
@@ -369,10 +369,10 @@ namespace SeleniumProj
             logger.Debug("Language selected...");
 
             Thread.Sleep(1000);
-           
-           /* IWebElement acceptCookiesButton = FindElement(By.XPath(".//*[@id='cc-approve-button-thissite']"), logger);
-            acceptCookiesButton.Click();
-            logger.Debug("Accept cookies..."); */
+
+            /* IWebElement acceptCookiesButton = FindElement(By.XPath(".//*[@id='cc-approve-button-thissite']"), logger);
+             acceptCookiesButton.Click();
+             logger.Debug("Accept cookies..."); */
 
             IWebElement selectEmailButton = FindElement(By.XPath(".//*[@id='registration-form-email']"), logger);
             selectEmailButton.Click();
@@ -398,7 +398,7 @@ namespace SeleniumProj
             numberSelect.Click();
             logger.Debug("Number choses");
 
-            IWebElement phoneNumber = FindElement(By.XPath(".//*[@id='registration-form-phone']"),logger);
+            IWebElement phoneNumber = FindElement(By.XPath(".//*[@id='registration-form-phone']"), logger);
             phoneNumber.SendKeys("953502025");
             logger.Debug("Phone number entered...");
 
@@ -412,7 +412,7 @@ namespace SeleniumProj
             genderButton.Click();
             logger.Debug("Gender selected...");
 
-            IWebElement firstName= FindElement(By.XPath(".//*[@id='registration-form-fname']"), logger);
+            IWebElement firstName = FindElement(By.XPath(".//*[@id='registration-form-fname']"), logger);
             firstName.SendKeys("Test");
             logger.Debug("First name entered...");
 
@@ -424,7 +424,7 @@ namespace SeleniumProj
             password.SendKeys("Test111?");
             logger.Debug("Password entered...");
 
-            IWebElement passwordRepeat= FindElement(By.XPath(".//*[@id='registration-form-password-confirm']"), logger);
+            IWebElement passwordRepeat = FindElement(By.XPath(".//*[@id='registration-form-password-confirm']"), logger);
             passwordRepeat.SendKeys("Test111?");
             logger.Debug("Repeated password entered...");
 
@@ -484,10 +484,10 @@ namespace SeleniumProj
             Assert.Pass("Falconeri testing");
         }
 
-        [Test(),Category("BuyingProductWithPaypal")]
+        [Test(), Category("BuyingProductWithPaypal")]
         [Obsolete]
         public void BuyingProductWithPaypal()
-        {   
+        {
             IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
             var csv = InitializeCSV("C:/Users/GrabusicT/Documents/SeleniumTesting/SeleniumAutomation/SeleniumProj/bin/Debug/CsvFiles/user.csv");
             WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(60));
@@ -599,7 +599,7 @@ namespace SeleniumProj
             //IWebElement categoryButton = FindElement(By.XPath(".//*[@data-tab='#FAL_Women']"), logger);
             //Actions action = new Actions(driver);
             //action.MoveToElement(categoryButton).Perform();
-            
+
             //Thread.Sleep(1000);
 
             //IWebElement subCategoryButton = FindElement(By.XPath(".//*[@data-href='/us/women/clothing/']"), logger);
@@ -614,7 +614,7 @@ namespace SeleniumProj
 
             driver.Url = "https://test.falconeri.com/us/women/clothing/skirts/";
 
-           
+
             //driver.Navigate().GoToUrl("http://www.google.com");
 
             logger.Debug("Test finished!");
@@ -1155,14 +1155,14 @@ namespace SeleniumProj
 
 
         }
-           
+
         public string GetOrderNumber(string text)
         {
             // Create a pattern for a word that starts with letter "M"  
             string pattern = @"[A-Z a-z !]+";
             string orderText = text;
             //"Thank you for your order 123213213213!"
-            
+
             // Create a Regex
             Regex rg = new Regex(pattern);
             string orderNumber = Regex.Replace(orderText, pattern, "");
@@ -1340,7 +1340,7 @@ namespace SeleniumProj
             Thread.Sleep(2000);
             action.MoveToElement(countryChoiceButton).Perform();
             Thread.Sleep(4000);
-            countryChoiceButton.Click(); 
+            countryChoiceButton.Click();
 
             #endregion
 
@@ -1371,11 +1371,11 @@ namespace SeleniumProj
 
             Thread.Sleep(3000);
             IWebElement monthButton = FindElement(By.XPath("(.//*[@data-option-array-index='1'])[3]"), logger);
-            Thread.Sleep(3000); 
+            Thread.Sleep(3000);
             //action.MoveToElement(monthButton).Perform();
             //Thread.Sleep(2000); 
             monthButton.Click();
-           
+
             #endregion
 
             #region YearForCreditCard
@@ -1505,12 +1505,15 @@ namespace SeleniumProj
             #endregion
 
             #region FindContinueToShippingMethod
-            IWebElement continueButton = FindElement(By.XPath(".//*[@class='button button-black submit-shipping wide fwidth-padding']"), logger);
+            TryAndClick(".//*[@class='button button-black submit-shipping wide fwidth-padding']", 5);
             #endregion
+            //#region FindContinueToShippingMethod
+            //IWebElement continueButton = FindElement(By.XPath(".//*[@class='button button-black submit-shipping wide fwidth-padding']"), logger);
+            //#endregion
 
-            #region ClickContinueToShippingMethod
-            continueButton.Click();
-            #endregion
+            //#region ClickContinueToShippingMethod
+            //continueButton.Click();
+            //#endregion
 
             #region FindElementsFirstScreen
             IWebElement emailInput = FindElement(By.XPath(".//*[@id='shippingEmail']"), logger);
@@ -1569,7 +1572,7 @@ namespace SeleniumProj
             cardNumberInput.SendKeys("4775718800002026");
             IWebElement monthChoice = FindElement(By.XPath(".//*[@for='expirationMonth']"), logger);
             monthChoice.Click();
-            IWebElement monthButton = FindElement(By.XPath("(.//*[@data-option-array-index='1'])[3]"), logger); 
+            IWebElement monthButton = FindElement(By.XPath("(.//*[@data-option-array-index='1'])[3]"), logger);
             monthButton.Click();
             IWebElement yearChoice = FindElement(By.XPath(".//*[@for='expirationYear']"), logger);
             yearChoice.Click();
@@ -1616,7 +1619,7 @@ namespace SeleniumProj
         [Test()]
         public void OrderingWithPayPal()
         {
-            bool isLoggedIn = true; 
+            bool isLoggedIn = true;
             Actions action = new Actions(driver);
             //https://test.falconeri.com/us/product/DAL449A++8521M.html
             var logger = NLog.Web.NLogBuilder.ConfigureNLog("NLog.config").GetCurrentClassLogger();
@@ -1809,7 +1812,7 @@ namespace SeleniumProj
             #endregion
 
             #region PayButton
-            Thread.Sleep(1000); 
+            Thread.Sleep(1000);
             IWebElement payButton = FindElement(By.XPath(".//*[@class='paypal-checkout-button js_paypal_button_on_billing_form']"), logger);
             payButton.Click();
             #endregion
@@ -1823,13 +1826,13 @@ namespace SeleniumProj
             Thread.Sleep(1000);
             IWebElement payPalEmail = FindElement(By.XPath(".//*[@id='email']"), logger);
             payPalEmail.Clear();
-            Thread.Sleep(1000); 
+            Thread.Sleep(1000);
             payPalEmail.SendKeys("calzedonia.test@calzedonia.it");
             #endregion
 
             #region PayPalPassword
             Thread.Sleep(1000);
-            IWebElement payPalPassword = FindElement(By.XPath(".//*[@id='password']"), logger); 
+            IWebElement payPalPassword = FindElement(By.XPath(".//*[@id='password']"), logger);
             payPalPassword.SendKeys("test$prova");
             #endregion
 
@@ -1915,7 +1918,7 @@ namespace SeleniumProj
 
             IWebElement orderText = FindElement(By.XPath(".//*[@class='cell order-thank-you-msg h4 side-margins receipt-title']"), logger);
             string str = orderText.Text;
-            InsertOrder($"C:/Users/GrabusicT/Documents/SeleniumTesting/SeleniumAutomation/SeleniumProj/bin/Debug/orders/paypal/orders-paypal-{ DateTime.UtcNow.ToFileTime()}.csv", GetOrderNumber(str), "Soldato","PayPal");
+            InsertOrder($"C:/Users/GrabusicT/Documents/SeleniumTesting/SeleniumAutomation/SeleniumProj/bin/Debug/orders/paypal/orders-paypal-{ DateTime.UtcNow.ToFileTime()}.csv", GetOrderNumber(str), "Soldato", "PayPal");
             #endregion
 
             #region TestPassed
@@ -1924,7 +1927,7 @@ namespace SeleniumProj
             Assert.Pass("Falconeri testing");
             #endregion
         }
-
+   
         [Test()]
         public void OrderingWithPayPalExsp()
         {
@@ -1983,12 +1986,14 @@ namespace SeleniumProj
             #endregion
 
             #region FindContinueToShippingMethod
-            Thread.Sleep(500);
-            IWebElement continueButton = FindElement(By.XPath(".//*[@class='button button-black submit-shipping wide fwidth-padding']"), logger);
+            //IWebElement continueButton = FindElement(By.XPath(".//*[@class='button button-black submit-shipping wide fwidth-padding']"), logger);
+            //Thread.Sleep(1000);
+            TryAndClick(".//*[@class='button button-black submit-shipping wide fwidth-padding']", 5);
             #endregion
 
             #region ClickContinueToShippingMethod
-            continueButton.Click();
+            //continueButton.Click();
+            
             #endregion
 
             #region FindElementsFirstScreen
@@ -2023,15 +2028,11 @@ namespace SeleniumProj
             zipInput.SendKeys("99611");
             IWebElement stateButton = FindElement(By.XPath(".//*[@id='shippingState_chosen']"), logger);
             stateButton.Click();
-            Thread.Sleep(500);
             IWebElement stateChoiceButton = FindElement(By.XPath("(.//*[@data-option-array-index='2'])[2]"), logger);
-            Thread.Sleep(500);
             stateChoiceButton.Click();
             IWebElement countryButton = FindElement(By.XPath(".//*[@for='shippingCountry']"), logger);
             countryButton.Click();
-            Thread.Sleep(500);
             IWebElement countryChoiceButton = FindElement(By.XPath("(.//*[@data-option-array-index='0'])[3]"), logger);
-            Thread.Sleep(500);
             countryChoiceButton.Click();
             continueButtonOntoPayment.Click();
             #endregion
