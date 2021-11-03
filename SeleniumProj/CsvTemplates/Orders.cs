@@ -14,6 +14,7 @@ namespace SeleniumProj.CsvTemplates
         public string LastName { get; set; }
 
         public string PaymentMethod { get; set; }
+        public string PaymentAmount { get; set; }
         //public List<Orders> OrderList { get; set; }
 
         public Orders()
@@ -71,6 +72,22 @@ namespace SeleniumProj.CsvTemplates
                     OrderDate = DateTime.Now,
                     LastName = lastName,
                     PaymentMethod = paymentMethod
+                }
+            };
+        }
+
+        public static List<Orders> AddOrder(string orderNumber, string lastName, string paymentMethod, string paymentAmount)
+        {
+            return new List<Orders>
+            {
+                new Orders
+                {
+                    //OrderId = id,
+                    OrderNumber = orderNumber,
+                    OrderDate = DateTime.Now,
+                    LastName = lastName,
+                    PaymentMethod = paymentMethod,
+                    PaymentAmount = paymentAmount
                 }
             };
         }
