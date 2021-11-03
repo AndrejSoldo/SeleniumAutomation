@@ -242,6 +242,23 @@ namespace SeleniumProj
             }
         }
 
+        public void InsertOrder(string csvp, string orderNum, string lastName, string paymentMethod, string paymentAmount)
+        {
+            using (var stream = File.Open(csvp, FileMode.Append))
+            {
+                using (var streamWriter = new StreamWriter(stream))
+                {
+                    using (var csvWriter = new CsvWriter(streamWriter, new CsvConfiguration(CultureInfo.InvariantCulture) { HasHeaderRecord = false, Delimiter = ";" }))
+                    {
+                        //var orders = Orders.GetOrders();
+                        //csvWriter.WriteRecords(orders);
+                        var order = Orders.AddOrder(orderNum, lastName, paymentMethod, paymentAmount);
+                        csvWriter.WriteRecords(order);
+                    }
+                }
+            }
+        }
+
         public List<Users> InitializeUsersCSV(string path, string delimiter)
         {
             var config = new CsvConfiguration(CultureInfo.InvariantCulture)
@@ -1170,6 +1187,20 @@ namespace SeleniumProj
             return orderNumber;
         }
 
+        public string GetOrderAmount(string text)
+        {
+            // Create a pattern for a word that starts with letter "M"  
+            string pattern = @"[0-9,0-9 $ € !]+";
+            string orderText = text;
+            //"Thank you for your order 123213213213!"
+
+            // Create a Regex
+            Regex rg = new Regex(pattern);
+            string orderAmount= Regex.Replace(orderText, pattern, "");
+            Console.WriteLine(orderAmount);
+            return orderAmount;
+        }
+
         [Test()]
         public void OrderingWithCreditCard()
         {
@@ -1537,8 +1568,9 @@ namespace SeleniumProj
 
                 #region ClickingAndSendingKeysFirstScreen
                 emailInput.SendKeys("KTeyGGrWE170@yopmail.com");
-                IWebElement numberPrefix = FindElement(By.XPath(".//*[@class='chosen-container chosen-container-single chosen-container-single-nosearch']"), logger);
-                numberPrefix.Click();
+                //IWebElement numberPrefix = FindElement(By.XPath(".//*[@class='chosen-container chosen-container-single chosen-container-single-nosearch']"), logger);
+                //numberPrefix.Click();
+                TryAndClick(".//*[@class='chosen-container chosen-container-single chosen-container-single-nosearch']", 5);
                 IWebElement numberSelect = FindElement(By.XPath(".//*[@data-option-array-index='2']"), logger);
                 numberSelect.Click();
                 numberInput.SendKeys("123456958");
@@ -1592,7 +1624,10 @@ namespace SeleniumProj
 
                 IWebElement orderText = FindElement(By.XPath(".//*[@class='cell order-thank-you-msg h4 side-margins receipt-title']"), logger);
                 string str = orderText.Text;
-                InsertOrder($"C:/Users/GrabusicT/Documents/SeleniumTesting/SeleniumAutomation/SeleniumProj/bin/Debug/orders/creditcard/orders-creditcard-{ DateTime.UtcNow.ToFileTime()}.csv", GetOrderNumber(str), "Soldato", "Credit card");
+
+                IWebElement orderTextAmount = FindElement(By.XPath(".//*[@class='grand-total-sum']"), logger);
+                string orderPaymentAmountText = orderTextAmount.Text;
+                InsertOrder($"C:/Users/GrabusicT/Documents/SeleniumTesting/SeleniumAutomation/SeleniumProj/bin/Debug/orders/creditcard/orders-creditcard-{ DateTime.UtcNow.ToFileTime()}.csv", GetOrderNumber(str), "Soldato", "Credit card", orderPaymentAmountText);
                 #endregion
 
                 #region Login 
@@ -2152,7 +2187,11 @@ namespace SeleniumProj
 
                 IWebElement orderText = FindElement(By.XPath(".//*[@class='cell order-thank-you-msg h4 side-margins receipt-title']"), logger);
                 string str = orderText.Text;
-                InsertOrder($"C:/Users/GrabusicT/Documents/SeleniumTesting/SeleniumAutomation/SeleniumProj/bin/Debug/orders/paypal/orders-paypal-{ DateTime.UtcNow.ToFileTime()}.csv", GetOrderNumber(str), "Soldato", "PayPal");
+
+                IWebElement orderTextAmount = FindElement(By.XPath(".//*[@class='grand-total-sum']"), logger);
+                string orderPaymentAmountText = orderTextAmount.Text;
+
+                InsertOrder($"C:/Users/GrabusicT/Documents/SeleniumTesting/SeleniumAutomation/SeleniumProj/bin/Debug/orders/paypal/orders-paypal-{ DateTime.UtcNow.ToFileTime()}.csv", GetOrderNumber(str), "Soldato", "PayPal", orderPaymentAmountText);
                 #endregion
 
             }
