@@ -19,7 +19,7 @@ namespace SeleniumProj.CsvTemplates
 
         public string PaymentMethod { get; set; }
         public string PaymentAmount { get; set; }
-        public string SkuAndAttribute { get; set; }
+        public List<string> SkuAndAttribute { get; set; }
         public bool IsRegistered { get; set; }
         //public List<Orders> OrderList { get; set; }
 
@@ -98,7 +98,7 @@ namespace SeleniumProj.CsvTemplates
             };
         }
 
-        public static List<Orders> AddOrder(string brand, string locale, string orderNumber, string lastName, string shippingMethod, string paymentMethod, string paymentAmount, string skuAndAttribute, bool isRegistered)
+        public static List<Orders> AddOrder(string brand, string locale, string orderNumber, string lastName, string shippingMethod, string paymentMethod, string paymentAmount, List<string> skuAndAttribute, bool isRegistered)
         {
             {
                 return new List<Orders>

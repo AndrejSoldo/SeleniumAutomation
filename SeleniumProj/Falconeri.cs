@@ -260,7 +260,7 @@ namespace SeleniumProj
 
         }
 
-        public void InsertOrder(string csvp, string brand, string locale,  string orderNum, string lastName, string shippingMethod, string paymentMethod, string paymentAmount,string skuAndAttribute, bool isRegistered)
+        public void InsertOrder(string csvp, string brand, string locale,  string orderNum, string lastName, string shippingMethod, string paymentMethod, string paymentAmount, List <string> skuAndAttribute, bool isRegistered)
         {
             using (var stream = File.Open(csvp, FileMode.Append))
             {
@@ -1506,10 +1506,12 @@ namespace SeleniumProj
             IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
             var csv = InitializeOrderInfoCSV("C:/Users/GrabusicT/Documents/SeleniumTesting/SeleniumAutomation/SeleniumProj/bin/Debug/orderingCsv/orderInfo.csv", ";");
             WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(60));
-
             string[] locales = new string[] { "us", "de" };
+            List<string> skuAndAttributes = new List<string>();
+
             for (int i = 0; i < locales.Length; i++)
             {
+                skuAndAttributes.Clear(); 
                 if (i == 0)
                 {
                     #region LogingScreenFindElements
@@ -1524,7 +1526,8 @@ namespace SeleniumProj
                 #region AddingProductsToBag
 
                 Thread.Sleep(1000);
-                for (int j = 0; j < 1; j++)
+                //products.Count
+                for (int j = 0; j < 2; j++)
                 {
                     driver.Navigate().GoToUrl($"https://test.falconeri.com/{locales[i]}/product/{csv[j].Sku}++{csv[j].Options}.html");
 
@@ -1535,6 +1538,8 @@ namespace SeleniumProj
                     #region ClickElementInProducts
                     addToBag.Click();
                     #endregion
+
+                    skuAndAttributes.Add($"{csv[j].Sku}-{csv[j].Options}");
                 }
 
                 #endregion
@@ -1589,9 +1594,9 @@ namespace SeleniumProj
                 emailInput.SendKeys("KTeyGGrWE170@yopmail.com");
                 //IWebElement numberPrefix = FindElement(By.XPath(".//*[@class='chosen-container chosen-container-single chosen-container-single-nosearch']"), logger);
                 //numberPrefix.Click();
-                TryAndClick(".//*[@class='chosen-container chosen-container-single chosen-container-single-nosearch']", 5);
-                IWebElement numberSelect = FindElement(By.XPath(".//*[@data-option-array-index='2']"), logger);
-                numberSelect.Click();
+                TryAndClick(".//*[@class='chosen-container chosen-container-single chosen-container-single-nosearch']", 10);
+                TryAndClick(".//*[@data-option-array-index='2']", 10);
+                TryAndClick(".//*[@id='shippingPhoneNumber']", 10);
                 numberInput.SendKeys("123456958");
                 newsButton.Click();
                 newsButtonWithProfile.Click();
@@ -1601,10 +1606,8 @@ namespace SeleniumProj
                 addressOtherInfoInput.SendKeys("Mi 2");
                 townInput.SendKeys("Kenai");
                 zipInput.SendKeys("99611");
-                IWebElement stateButton = FindElement(By.XPath(".//*[@id='shippingState_chosen']"), logger);
-                stateButton.Click();
-                IWebElement stateChoiceButton = FindElement(By.XPath("(.//*[@data-option-array-index='2'])[2]"), logger);
-                stateChoiceButton.Click();
+                TryAndClick(".//*[@id='shippingState_chosen']", 10);
+                TryAndClick("(.//*[@data-option-array-index='2'])[2]", 10); 
                 IWebElement countryButton = FindElement(By.XPath(".//*[@for='shippingCountry']"), logger);
                 countryButton.Click();
                 IWebElement countryChoiceButton = FindElement(By.XPath("(.//*[@data-option-array-index='0'])[3]"), logger);
@@ -1636,7 +1639,7 @@ namespace SeleniumProj
                 yearButton.Click();
                 cardCVVInput.SendKeys("123");
                 acceptingTermsButton.Click();
-                sendOrderButton.Click();
+                TryAndClick("(.//*[@name='submit'])[3]", 10); 
                 #endregion
 
                 #region Login 
@@ -1665,7 +1668,7 @@ namespace SeleniumProj
                 IWebElement orderTextAmount = FindElement(By.XPath(".//*[@class='grand-total-sum']"), logger);
                 string orderPaymentAmountText = orderTextAmount.Text;
 
-                InsertOrder($"C:/Users/GrabusicT/Documents/SeleniumTesting/SeleniumAutomation/SeleniumProj/bin/Debug/orders/creditcard/orders-creditcard-{ DateTime.UtcNow.ToFileTime()}.csv","Falconeri",locales[i], GetOrderNumber(str), "Soldato","Standard Shipping", "Credit card", orderPaymentAmountText, csv[0].Sku+csv[0].Options, isLoggedIn);
+                InsertOrder($"C:/Users/GrabusicT/Documents/SeleniumTesting/SeleniumAutomation/SeleniumProj/bin/Debug/orders/creditcard/orders-creditcard-{ DateTime.UtcNow.ToFileTime()}.csv","Falconeri",locales[i], GetOrderNumber(str), "Soldato","Standard Shipping", "Credit card", orderPaymentAmountText, skuAndAttributes, isLoggedIn);
                 #endregion
 
             }
