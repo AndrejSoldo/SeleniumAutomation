@@ -257,6 +257,25 @@ namespace SeleniumProj
                     }
                 }
             }
+
+        }
+
+        public void InsertOrder(string csvp, string brand, string locale,  string orderNum, string lastName, string shippingMethod, string paymentMethod, string paymentAmount,string skuAndAttribute, bool isRegistered)
+        {
+            using (var stream = File.Open(csvp, FileMode.Append))
+            {
+                using (var streamWriter = new StreamWriter(stream))
+                {
+                    using (var csvWriter = new CsvWriter(streamWriter, new CsvConfiguration(CultureInfo.InvariantCulture) { HasHeaderRecord = false, Delimiter = ";" }))
+                    {
+                        //var orders = Orders.GetOrders();
+                        //csvWriter.WriteRecords(orders);
+                        var order = Orders.AddOrder(brand,locale,orderNum, lastName, shippingMethod, paymentMethod, paymentAmount, skuAndAttribute, isRegistered);
+                        csvWriter.WriteRecords(order);
+                    }
+                }
+            }
+
         }
 
         public List<Users> InitializeUsersCSV(string path, string delimiter)
@@ -1620,16 +1639,6 @@ namespace SeleniumProj
                 sendOrderButton.Click();
                 #endregion
 
-                #region SavingOrderInfo
-
-                IWebElement orderText = FindElement(By.XPath(".//*[@class='cell order-thank-you-msg h4 side-margins receipt-title']"), logger);
-                string str = orderText.Text;
-
-                IWebElement orderTextAmount = FindElement(By.XPath(".//*[@class='grand-total-sum']"), logger);
-                string orderPaymentAmountText = orderTextAmount.Text;
-                InsertOrder($"C:/Users/GrabusicT/Documents/SeleniumTesting/SeleniumAutomation/SeleniumProj/bin/Debug/orders/creditcard/orders-creditcard-{ DateTime.UtcNow.ToFileTime()}.csv", GetOrderNumber(str), "Soldato", "Credit card", orderPaymentAmountText);
-                #endregion
-
                 #region Login 
 
                 if (isLoggedIn)
@@ -1647,6 +1656,18 @@ namespace SeleniumProj
                 }
 
                 #endregion
+
+                #region SavingOrderInfo
+
+                IWebElement orderText = FindElement(By.XPath(".//*[@class='cell order-thank-you-msg h4 side-margins receipt-title']"), logger);
+                string str = orderText.Text;
+
+                IWebElement orderTextAmount = FindElement(By.XPath(".//*[@class='grand-total-sum']"), logger);
+                string orderPaymentAmountText = orderTextAmount.Text;
+
+                InsertOrder($"C:/Users/GrabusicT/Documents/SeleniumTesting/SeleniumAutomation/SeleniumProj/bin/Debug/orders/creditcard/orders-creditcard-{ DateTime.UtcNow.ToFileTime()}.csv","Falconeri",locales[i], GetOrderNumber(str), "Soldato","Standard Shipping", "Credit card", orderPaymentAmountText, csv[0].Sku+csv[0].Options, isLoggedIn);
+                #endregion
+
             }
             #region TestPassed
             logger.Debug("Test finished!");
@@ -1979,8 +2000,10 @@ namespace SeleniumProj
             IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
             var csv = InitializeOrderInfoCSV("C:/Users/GrabusicT/Documents/SeleniumTesting/SeleniumAutomation/SeleniumProj/bin/Debug/orderingCsv/orderInfo.csv", ";");
             WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(60));
-            #endregion
             string[] locales = new string[] { "us", "de"};
+            #endregion
+
+
             for (int i = 0; i < locales.Length; i++)
             {
                 if (i == 0)
@@ -2199,7 +2222,8 @@ namespace SeleniumProj
                 logger.Debug("Test finished!");
                 NLog.LogManager.Shutdown();
                 Assert.Pass("Falconeri testing");
-                #endregion
+            #endregion
+
         }
     }
 }

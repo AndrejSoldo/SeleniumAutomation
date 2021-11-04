@@ -9,12 +9,18 @@ namespace SeleniumProj.CsvTemplates
     public class Orders
     {
         //public string OrderId { get; set; }
+        public string Brand { get; set; }
+        public string Locale { get; set; }
+        
         public string OrderNumber { get; set; }
         public DateTime OrderDate { get; set; }
         public string LastName { get; set; }
+        public string ShippingMethod { get; set; }
 
         public string PaymentMethod { get; set; }
         public string PaymentAmount { get; set; }
+        public string SkuAndAttribute { get; set; }
+        public bool IsRegistered { get; set; }
         //public List<Orders> OrderList { get; set; }
 
         public Orders()
@@ -91,5 +97,29 @@ namespace SeleniumProj.CsvTemplates
                 }
             };
         }
+
+        public static List<Orders> AddOrder(string brand, string locale, string orderNumber, string lastName, string shippingMethod, string paymentMethod, string paymentAmount, string skuAndAttribute, bool isRegistered)
+        {
+            {
+                return new List<Orders>
+            {
+                new Orders
+                {
+                    //OrderId = id,
+                    Brand = brand,
+                    Locale = locale,
+                    OrderNumber = orderNumber,
+                    OrderDate = DateTime.Now,
+                    LastName = lastName,
+                    ShippingMethod = shippingMethod,
+                    PaymentMethod = paymentMethod,
+                    PaymentAmount = paymentAmount,
+                    SkuAndAttribute = skuAndAttribute,
+                    IsRegistered = isRegistered
+                }
+            };
+            }
+        }
     }
 }
+
