@@ -1,0 +1,3 @@
+Brand;Locale;OrderNumber;OrderDate;LastName;ShippingMethod;PaymentMethod;PaymentAmount;SkuAndAttribute;IsRegistered
+Falconeri;us;21045859;11/04/2021 16:03:09;Soldato;Standard Shipping;PayPal;$406.00;DAL449A-8521M,DAL449A-8521L;True
+Falconeri;de;21045860;11/04/2021 16:03:39;Soldato;Standard Shipping;PayPal;934,00 €;DAL449A-8521M,DAL449A-8521L;True
