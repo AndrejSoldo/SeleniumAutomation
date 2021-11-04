@@ -262,15 +262,30 @@ namespace SeleniumProj
 
         public void InsertOrder(string csvp, string brand, string locale,  string orderNum, string lastName, string shippingMethod, string paymentMethod, string paymentAmount, List <string> skuAndAttribute, bool isRegistered)
         {
+            bool records = true;
+            
             using (var stream = File.Open(csvp, FileMode.Append))
             {
+                FileInfo fi = new FileInfo(csvp);
+                if (fi.Length > 0)
+                {
+                    records = false;
+                }
                 using (var streamWriter = new StreamWriter(stream))
                 {
-                    using (var csvWriter = new CsvWriter(streamWriter, new CsvConfiguration(CultureInfo.InvariantCulture) { HasHeaderRecord = false, Delimiter = ";" }))
+                    //HasHeaderRecord = false,
+                    using (var csvWriter = new CsvWriter(streamWriter, new CsvConfiguration(CultureInfo.InvariantCulture) { HasHeaderRecord = records, Delimiter = ";" }))
                     {
                         //var orders = Orders.GetOrders();
                         //csvWriter.WriteRecords(orders);
-                        var order = Orders.AddOrder(brand,locale,orderNum, lastName, shippingMethod, paymentMethod, paymentAmount, skuAndAttribute, isRegistered);
+                        string listOfSkusAndAttributes = "";
+                        for(int i = 0; i < skuAndAttribute.Count; i++)
+                        {
+                            listOfSkusAndAttributes = string.Join(",",skuAndAttribute[i].ToArray());  
+
+                        }
+                        Console.WriteLine(listOfSkusAndAttributes);
+                        var order = Orders.AddOrder(brand,locale,orderNum, lastName, shippingMethod, paymentMethod, paymentAmount, listOfSkusAndAttributes, isRegistered);
                         csvWriter.WriteRecords(order);
                     }
                 }
@@ -1509,6 +1524,8 @@ namespace SeleniumProj
             string[] locales = new string[] { "us", "de" };
             List<string> skuAndAttributes = new List<string>();
 
+            DateTime timeFile = DateTime.UtcNow;
+
             for (int i = 0; i < locales.Length; i++)
             {
                 skuAndAttributes.Clear(); 
@@ -1657,6 +1674,7 @@ namespace SeleniumProj
 
                     #endregion
                 }
+                
 
                 #endregion
 
@@ -1668,7 +1686,7 @@ namespace SeleniumProj
                 IWebElement orderTextAmount = FindElement(By.XPath(".//*[@class='grand-total-sum']"), logger);
                 string orderPaymentAmountText = orderTextAmount.Text;
 
-                InsertOrder($"C:/Users/GrabusicT/Documents/SeleniumTesting/SeleniumAutomation/SeleniumProj/bin/Debug/orders/creditcard/orders-creditcard-{ DateTime.UtcNow.ToFileTime()}.csv","Falconeri",locales[i], GetOrderNumber(str), "Soldato","Standard Shipping", "Credit card", orderPaymentAmountText, skuAndAttributes, isLoggedIn);
+                InsertOrder($"C:/Users/GrabusicT/Documents/SeleniumTesting/SeleniumAutomation/SeleniumProj/bin/Debug/orders/creditcard/orders-creditcard-{timeFile.ToFileTime()}.csv","Falconeri",locales[i], GetOrderNumber(str), "Soldato","Standard Shipping", "Credit card", orderPaymentAmountText, skuAndAttributes, isLoggedIn);
                 #endregion
 
             }
@@ -2005,10 +2023,13 @@ namespace SeleniumProj
             WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(60));
             string[] locales = new string[] { "us", "de"};
             #endregion
+            List<string> skuAndAttributes = new List<string>();
 
+            DateTime timeFile = DateTime.UtcNow;
 
             for (int i = 0; i < locales.Length; i++)
             {
+                skuAndAttributes.Clear(); 
                 if (i == 0)
                 {
                     #region LogingScreenFindElements
@@ -2023,7 +2044,7 @@ namespace SeleniumProj
 
                 #region AddingProductsToBag
 
-                for (int j = 0; j < 1; j++)
+                for (int j = 0; j < 2; j++)
                 {
                     Thread.Sleep(1000);
                     driver.Navigate().GoToUrl($"https://test.falconeri.com/{locales[i]}/product/{csv[j].Sku}++{csv[j].Options}.html");
@@ -2034,6 +2055,7 @@ namespace SeleniumProj
                     #region ClickElementInProducts
                     addToBag.Click();
                     #endregion
+                    skuAndAttributes.Add($"{csv[j].Sku}-{csv[j].Options}");
                 }
 
                 #endregion
@@ -2069,6 +2091,7 @@ namespace SeleniumProj
 
                 #endregion
 
+
                 #region FindElementsFirstScreen
                 IWebElement emailInput = FindElement(By.XPath(".//*[@id='shippingEmail']"), logger);
                 IWebElement numberInput = FindElement(By.XPath(".//*[@id='shippingPhoneNumber']"), logger);
@@ -2086,10 +2109,11 @@ namespace SeleniumProj
 
                 #region ClickingAndSendingKeysFirstScreen
                 emailInput.SendKeys("KTeyGGrWE170@yopmail.com");
-                IWebElement numberPrefix = FindElement(By.XPath(".//*[@class='chosen-container chosen-container-single chosen-container-single-nosearch']"), logger);
-                numberPrefix.Click();
-                IWebElement numberSelect = FindElement(By.XPath(".//*[@data-option-array-index='2']"), logger);
-                numberSelect.Click();
+                //IWebElement numberPrefix = FindElement(By.XPath(".//*[@class='chosen-container chosen-container-single chosen-container-single-nosearch']"), logger);
+                //numberPrefix.Click();
+                TryAndClick(".//*[@class='chosen-container chosen-container-single chosen-container-single-nosearch']", 10);
+                TryAndClick(".//*[@data-option-array-index='2']", 10);
+                TryAndClick(".//*[@id='shippingPhoneNumber']", 10);
                 numberInput.SendKeys("123456958");
                 newsButton.Click();
                 newsButtonWithProfile.Click();
@@ -2099,15 +2123,14 @@ namespace SeleniumProj
                 addressOtherInfoInput.SendKeys("Mi 2");
                 townInput.SendKeys("Kenai");
                 zipInput.SendKeys("99611");
-                IWebElement stateButton = FindElement(By.XPath(".//*[@id='shippingState_chosen']"), logger);
-                stateButton.Click();
-                IWebElement stateChoiceButton = FindElement(By.XPath("(.//*[@data-option-array-index='2'])[2]"), logger);
-                stateChoiceButton.Click();
+                TryAndClick(".//*[@id='shippingState_chosen']", 10);
+                TryAndClick("(.//*[@data-option-array-index='2'])[2]", 10);
                 IWebElement countryButton = FindElement(By.XPath(".//*[@for='shippingCountry']"), logger);
                 countryButton.Click();
                 IWebElement countryChoiceButton = FindElement(By.XPath("(.//*[@data-option-array-index='0'])[3]"), logger);
                 countryChoiceButton.Click();
                 continueButtonOntoPayment.Click();
+
                 #endregion
 
                 #region FindPayPal
@@ -2216,11 +2239,12 @@ namespace SeleniumProj
 
                 IWebElement orderTextAmount = FindElement(By.XPath(".//*[@class='grand-total-sum']"), logger);
                 string orderPaymentAmountText = orderTextAmount.Text;
-
-                InsertOrder($"C:/Users/GrabusicT/Documents/SeleniumTesting/SeleniumAutomation/SeleniumProj/bin/Debug/orders/paypal/orders-paypal-{ DateTime.UtcNow.ToFileTime()}.csv", GetOrderNumber(str), "Soldato", "PayPal", orderPaymentAmountText);
+                Console.WriteLine($"({ skuAndAttributes[0]} {skuAndAttributes[1]})");  
+                InsertOrder($"C:/Users/GrabusicT/Documents/SeleniumTesting/SeleniumAutomation/SeleniumProj/bin/Debug/orders/paypal/orders-paypal-{timeFile.ToFileTime()}.csv", "Falconeri", locales[i], GetOrderNumber(str), "Soldato", "Standard Shipping", "PayPal", orderPaymentAmountText, skuAndAttributes, isLoggedIn);
                 #endregion
 
             }
+
                 #region TestPassed
                 logger.Debug("Test finished!");
                 NLog.LogManager.Shutdown();
