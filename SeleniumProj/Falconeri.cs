@@ -1571,19 +1571,19 @@ namespace SeleniumProj
         [Test()]
         public void OrderingWithCreditCardExsp()
         {
-            bool isLoggedIn = true;
             //https://test.falconeri.com/us/product/DAL449A++8521M.html
             var logger = NLog.Web.NLogBuilder.ConfigureNLog("NLog.config").GetCurrentClassLogger();
             IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
             var csv = InitializeOrderInfoCSV("C:/Users/GrabusicT/Documents/SeleniumTesting/SeleniumAutomation/SeleniumProj/bin/Debug/orderingCsv/orderInfo.csv", ";");
+            var jsonSetup = InitializeFalconeriSetup("soldoJson.json"); 
             WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(60));
             string[] locales = new string[] { "us", "de" };
             List<string> skuAndAttributes = new List<string>();
-
+            bool isLoggedIn = jsonSetup.orderSetup[0].isRegistered; 
 
             DateTime timeFile = DateTime.UtcNow;
 
-            for (int i = 0; i < locales.Length; i++)
+            for (int i = 0; i < jsonSetup.orderSetup[0].locales.Count; i++)
             {
                 skuAndAttributes.Clear(); 
                 if (i == 0)
@@ -1601,10 +1601,10 @@ namespace SeleniumProj
 
                 Thread.Sleep(1000);
                 //products.Count
-                for (int j = 0; j < 2; j++)
+                for (int j = 0; j < jsonSetup.orderSetup[0].products.Count; j++)
                 {
-                    driver.Navigate().GoToUrl($"https://test.falconeri.com/{locales[i]}/product/{csv[j].Sku}++{csv[j].Options}.html");
-
+                    //driver.Navigate().GoToUrl($"https://test.falconeri.com/{locales[i]}/product/{csv[j].Sku}++{csv[j].Options}.html");
+                    driver.Navigate().GoToUrl($"https://test.falconeri.com/{jsonSetup.orderSetup[0].locales[i]}/product/{jsonSetup.orderSetup[0].products[j]}.html");
                     #region FindElementInProducts
                     IWebElement addToBag = FindElement(By.XPath($".//*[@class='cell auto add-to-cart button button-addtocart']"), logger);
                     #endregion
@@ -1613,7 +1613,7 @@ namespace SeleniumProj
                     addToBag.Click();
                     #endregion
 
-                    skuAndAttributes.Add($"{csv[j].Sku}-{csv[j].Options}");
+                    skuAndAttributes.Add($"{jsonSetup.orderSetup[0].products[j]}");
                 }
 
                 #endregion
@@ -1665,29 +1665,51 @@ namespace SeleniumProj
                 #endregion
 
                 #region ClickingAndSendingKeysFirstScreen
-                emailInput.SendKeys("KTeyGGrWE170@yopmail.com");
-                //IWebElement numberPrefix = FindElement(By.XPath(".//*[@class='chosen-container chosen-container-single chosen-container-single-nosearch']"), logger);
-                //numberPrefix.Click();
+                //emailInput.SendKeys("KTeyGGrWE170@yopmail.com");
+                //TryAndClick(".//*[@class='chosen-container chosen-container-single chosen-container-single-nosearch']", 10);
+                //TryAndClick($".//*[@data-option-array-index='2']", 10);
+                //TryAndClick(".//*[@id='shippingPhoneNumber']", 10);
+                //numberInput.SendKeys("123456958");
+                //newsButton.Click();
+                //newsButtonWithProfile.Click();
+                //firstNameInput.SendKeys("KTeyG");
+                //lastNameInput.SendKeys("KTeyG");
+                //addressInput.SendKeys("10447 Kenai Spur Hwy");
+                //addressOtherInfoInput.SendKeys("Mi 2");
+                //townInput.SendKeys("Kenai");
+                //zipInput.SendKeys("99611");
+                //TryAndClick(".//*[@id='shippingState_chosen']", 10);
+                //TryAndClick("(.//*[@data-option-array-index='2'])[2]", 10); 
+                //IWebElement countryButton = FindElement(By.XPath(".//*[@for='shippingCountry']"), logger);
+                //countryButton.Click();
+                //IWebElement countryChoiceButton = FindElement(By.XPath("(.//*[@data-option-array-index='0'])[3]"), logger);
+                //countryChoiceButton.Click();
+                //continueButtonOntoPayment.Click();
+                emailInput.SendKeys(jsonSetup.credentials["userEmail"]);
                 TryAndClick(".//*[@class='chosen-container chosen-container-single chosen-container-single-nosearch']", 10);
-                TryAndClick($".//*[@data-option-array-index='2']", 10);
+                TryAndClick($".//*[@data-option-array-index='{jsonSetup.credentials["userNumberPrefix"]}']", 10);
                 TryAndClick(".//*[@id='shippingPhoneNumber']", 10);
-                numberInput.SendKeys("123456958");
-                newsButton.Click();
-                newsButtonWithProfile.Click();
-                firstNameInput.SendKeys("KTeyG");
-                lastNameInput.SendKeys("KTeyG");
-                addressInput.SendKeys("10447 Kenai Spur Hwy");
-                addressOtherInfoInput.SendKeys("Mi 2");
-                townInput.SendKeys("Kenai");
-                zipInput.SendKeys("99611");
+                numberInput.SendKeys(jsonSetup.credentials["userNumber"]);
+
+                if (jsonSetup.orderSetup[0].userChoiceNewsletter[0])
+                {
+                    newsButton.Click();
+                    newsButtonWithProfile.Click();
+                }
+
+                firstNameInput.SendKeys(jsonSetup.credentials["userName"]);
+                lastNameInput.SendKeys(jsonSetup.credentials["userSurname"]);
+                addressInput.SendKeys(jsonSetup.credentials["userAddress"]);
+                addressOtherInfoInput.SendKeys(jsonSetup.credentials["userAdditionalAddressInfo"]);
+                townInput.SendKeys(jsonSetup.credentials["userTown"]);
+                zipInput.SendKeys(jsonSetup.credentials["userZIP"]);
                 TryAndClick(".//*[@id='shippingState_chosen']", 10);
-                TryAndClick("(.//*[@data-option-array-index='2'])[2]", 10); 
+                TryAndClick($"(.//*[@data-option-array-index='{jsonSetup.credentials["userState"]}'])[2]", 10);
                 IWebElement countryButton = FindElement(By.XPath(".//*[@for='shippingCountry']"), logger);
                 countryButton.Click();
-                IWebElement countryChoiceButton = FindElement(By.XPath("(.//*[@data-option-array-index='0'])[3]"), logger);
+                IWebElement countryChoiceButton = FindElement(By.XPath($"(.//*[@data-option-array-index='{jsonSetup.credentials["userCountry"]}'])[3]"), logger);
                 countryChoiceButton.Click();
                 continueButtonOntoPayment.Click();
-
                 #endregion
 
 
@@ -1701,19 +1723,34 @@ namespace SeleniumProj
                 #endregion
 
                 #region ClickingAndSendingKeysSecondScreen
-                nameOnCardInput.SendKeys("Kar");
-                cardNumberInput.SendKeys("4775718800002026");
+                //nameOnCardInput.SendKeys("Kar");
+                //cardNumberInput.SendKeys("4775718800002026");
+                //IWebElement monthChoice = FindElement(By.XPath(".//*[@for='expirationMonth']"), logger);
+                //monthChoice.Click();
+                //IWebElement monthButton = FindElement(By.XPath("(.//*[@data-option-array-index='1'])[3]"), logger);
+                //monthButton.Click();
+                //IWebElement yearChoice = FindElement(By.XPath(".//*[@for='expirationYear']"), logger);
+                //yearChoice.Click();
+                //IWebElement yearButton = FindElement(By.XPath("(.//*[@data-option-array-index='2'])[4]"), logger);
+                //yearButton.Click();
+                //cardCVVInput.SendKeys("123");
+                //acceptingTermsButton.Click();
+                //TryAndClick("(.//*[@name='submit'])[3]", 10); 
+
+                nameOnCardInput.SendKeys(jsonSetup.credentials["creditCardName"]);
+                cardNumberInput.SendKeys(jsonSetup.credentials["creditCardNumber"]);
                 IWebElement monthChoice = FindElement(By.XPath(".//*[@for='expirationMonth']"), logger);
                 monthChoice.Click();
-                IWebElement monthButton = FindElement(By.XPath("(.//*[@data-option-array-index='1'])[3]"), logger);
+                IWebElement monthButton = FindElement(By.XPath($"(.//*[@data-option-array-index='{jsonSetup.credentials["creditCardMonth"]}'])[3]"), logger);
                 monthButton.Click();
                 IWebElement yearChoice = FindElement(By.XPath(".//*[@for='expirationYear']"), logger);
                 yearChoice.Click();
-                IWebElement yearButton = FindElement(By.XPath("(.//*[@data-option-array-index='2'])[4]"), logger);
+                IWebElement yearButton = FindElement(By.XPath($"(.//*[@data-option-array-index='{jsonSetup.credentials["creditCardYear"]}'])[4]"), logger);
                 yearButton.Click();
-                cardCVVInput.SendKeys("123");
+                cardCVVInput.SendKeys(jsonSetup.credentials["creditCardCVV"]);
                 acceptingTermsButton.Click();
-                TryAndClick("(.//*[@name='submit'])[3]", 10); 
+                TryAndClick("(.//*[@name='submit'])[3]", 10);
+
                 #endregion
 
                 #region Login 
@@ -1726,12 +1763,12 @@ namespace SeleniumProj
                     #endregion
 
                     #region ClickingAndSendingKeysThirdScreen
-                    passwordForLogin.SendKeys("Test??170");
+                    passwordForLogin.SendKeys(jsonSetup.credentials["userPassword"]);
                     loginButton.Click();
 
                     #endregion
                 }
-                
+
 
                 #endregion
 
@@ -1743,7 +1780,7 @@ namespace SeleniumProj
                 IWebElement orderTextAmount = FindElement(By.XPath(".//*[@class='grand-total-sum']"), logger);
                 string orderPaymentAmountText = orderTextAmount.Text;
 
-                InsertOrder($"C:/Users/GrabusicT/Documents/SeleniumTesting/SeleniumAutomation/SeleniumProj/bin/Debug/orders/creditcard/orders-creditcard-{timeFile.ToFileTime()}.csv","Falconeri",locales[i], GetOrderNumber(str), "Soldato","Standard Shipping", "Credit card", orderPaymentAmountText, skuAndAttributes, isLoggedIn);
+                InsertOrder($"C:/Users/GrabusicT/Documents/SeleniumTesting/SeleniumAutomation/SeleniumProj/bin/Debug/orders/creditcard/orders-creditcard-{timeFile.ToFileTime()}.csv","Falconeri",jsonSetup.orderSetup[0].locales[i], GetOrderNumber(str), "Soldato","Standard Shipping", "Credit card", orderPaymentAmountText, skuAndAttributes, isLoggedIn);
                 #endregion
 
             }
@@ -2071,7 +2108,6 @@ namespace SeleniumProj
         public void OrderingWithPayPalExsp()
         {
             #region Init
-            bool isLoggedIn = true;
             Actions action = new Actions(driver);
             //https://test.falconeri.com/us/product/DAL449A++8521M.html
             var logger = NLog.Web.NLogBuilder.ConfigureNLog("NLog.config").GetCurrentClassLogger();
@@ -2079,12 +2115,14 @@ namespace SeleniumProj
             var csv = InitializeOrderInfoCSV("C:/Users/GrabusicT/Documents/SeleniumTesting/SeleniumAutomation/SeleniumProj/bin/Debug/orderingCsv/orderInfo.csv", ";");
             WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(60));
             string[] locales = new string[] { "us", "de"};
+            var jsonSetup = InitializeFalconeriSetup("soldoJson.json");
+            bool isLoggedIn = jsonSetup.orderSetup[0].isRegistered;
             #endregion
             List<string> skuAndAttributes = new List<string>();
 
             DateTime timeFile = DateTime.UtcNow;
 
-            for (int i = 0; i < locales.Length; i++)
+            for (int i = 0; i < jsonSetup.orderSetup[0].locales.Count; i++)
             {
                 skuAndAttributes.Clear(); 
                 if (i == 0)
@@ -2101,10 +2139,10 @@ namespace SeleniumProj
 
                 #region AddingProductsToBag
 
-                for (int j = 0; j < 2; j++)
+                for (int j = 0; j < jsonSetup.orderSetup[0].products.Count; j++)
                 {
                     Thread.Sleep(1000);
-                    driver.Navigate().GoToUrl($"https://test.falconeri.com/{locales[i]}/product/{csv[j].Sku}++{csv[j].Options}.html");
+                    driver.Navigate().GoToUrl($"https://test.falconeri.com/{locales[i]}/product/{jsonSetup.orderSetup[0].products[j]}.html");
                     #region FindElementInProducts
                     IWebElement addToBag = FindElement(By.XPath($".//*[@class='cell auto add-to-cart button button-addtocart']"), logger);
                     #endregion
@@ -2112,7 +2150,7 @@ namespace SeleniumProj
                     #region ClickElementInProducts
                     addToBag.Click();
                     #endregion
-                    skuAndAttributes.Add($"{csv[j].Sku}-{csv[j].Options}");
+                    skuAndAttributes.Add($"{jsonSetup.orderSetup[0].products[j]}");
                 }
 
                 #endregion
@@ -2148,7 +2186,6 @@ namespace SeleniumProj
 
                 #endregion
 
-
                 #region FindElementsFirstScreen
                 IWebElement emailInput = FindElement(By.XPath(".//*[@id='shippingEmail']"), logger);
                 IWebElement numberInput = FindElement(By.XPath(".//*[@id='shippingPhoneNumber']"), logger);
@@ -2165,29 +2202,51 @@ namespace SeleniumProj
                 #endregion
 
                 #region ClickingAndSendingKeysFirstScreen
-                emailInput.SendKeys("KTeyGGrWE170@yopmail.com");
-                //IWebElement numberPrefix = FindElement(By.XPath(".//*[@class='chosen-container chosen-container-single chosen-container-single-nosearch']"), logger);
-                //numberPrefix.Click();
+                //emailInput.SendKeys("KTeyGGrWE170@yopmail.com");
+                //TryAndClick(".//*[@class='chosen-container chosen-container-single chosen-container-single-nosearch']", 10);
+                //TryAndClick($".//*[@data-option-array-index='2']", 10);
+                //TryAndClick(".//*[@id='shippingPhoneNumber']", 10);
+                //numberInput.SendKeys("123456958");
+                //newsButton.Click();
+                //newsButtonWithProfile.Click();
+                //firstNameInput.SendKeys("KTeyG");
+                //lastNameInput.SendKeys("KTeyG");
+                //addressInput.SendKeys("10447 Kenai Spur Hwy");
+                //addressOtherInfoInput.SendKeys("Mi 2");
+                //townInput.SendKeys("Kenai");
+                //zipInput.SendKeys("99611");
+                //TryAndClick(".//*[@id='shippingState_chosen']", 10);
+                //TryAndClick("(.//*[@data-option-array-index='2'])[2]", 10); 
+                //IWebElement countryButton = FindElement(By.XPath(".//*[@for='shippingCountry']"), logger);
+                //countryButton.Click();
+                //IWebElement countryChoiceButton = FindElement(By.XPath("(.//*[@data-option-array-index='0'])[3]"), logger);
+                //countryChoiceButton.Click();
+                //continueButtonOntoPayment.Click();
+                emailInput.SendKeys(jsonSetup.credentials["userEmail"]);
                 TryAndClick(".//*[@class='chosen-container chosen-container-single chosen-container-single-nosearch']", 10);
-                TryAndClick(".//*[@data-option-array-index='2']", 10);
+                TryAndClick($".//*[@data-option-array-index='{jsonSetup.credentials["userNumberPrefix"]}']", 10);
                 TryAndClick(".//*[@id='shippingPhoneNumber']", 10);
-                numberInput.SendKeys("123456958");
-                newsButton.Click();
-                newsButtonWithProfile.Click();
-                firstNameInput.SendKeys("KTeyG");
-                lastNameInput.SendKeys("KTeyG");
-                addressInput.SendKeys("10447 Kenai Spur Hwy");
-                addressOtherInfoInput.SendKeys("Mi 2");
-                townInput.SendKeys("Kenai");
-                zipInput.SendKeys("99611");
+                numberInput.SendKeys(jsonSetup.credentials["userNumber"]);
+
+                if (jsonSetup.orderSetup[0].userChoiceNewsletter[0])
+                {
+                    newsButton.Click();
+                    newsButtonWithProfile.Click();
+                }
+
+                firstNameInput.SendKeys(jsonSetup.credentials["userName"]);
+                lastNameInput.SendKeys(jsonSetup.credentials["userSurname"]);
+                addressInput.SendKeys(jsonSetup.credentials["userAddress"]);
+                addressOtherInfoInput.SendKeys(jsonSetup.credentials["userAdditionalAddressInfo"]);
+                townInput.SendKeys(jsonSetup.credentials["userTown"]);
+                zipInput.SendKeys(jsonSetup.credentials["userZIP"]);
                 TryAndClick(".//*[@id='shippingState_chosen']", 10);
-                TryAndClick("(.//*[@data-option-array-index='2'])[2]", 10);
+                TryAndClick($"(.//*[@data-option-array-index='{jsonSetup.credentials["userState"]}'])[2]", 10);
                 IWebElement countryButton = FindElement(By.XPath(".//*[@for='shippingCountry']"), logger);
                 countryButton.Click();
-                IWebElement countryChoiceButton = FindElement(By.XPath("(.//*[@data-option-array-index='0'])[3]"), logger);
+                IWebElement countryChoiceButton = FindElement(By.XPath($"(.//*[@data-option-array-index='{jsonSetup.credentials["userCountry"]}'])[3]"), logger);
                 countryChoiceButton.Click();
                 continueButtonOntoPayment.Click();
-
                 #endregion
 
                 #region FindPayPal
@@ -2198,14 +2257,7 @@ namespace SeleniumProj
                 paypalButton.Click();
                 #endregion
 
-                #region FindElementsInPayPal
-                //IWebElement acceptingTermsButton = FindElement(By.XPath("(.//*[@class='checkbox-input'])[7]"), logger);
-                #endregion
-
                 #region ClickElementsInPayPal
-                //acceptingTermsButton.Click();
-                //IWebElement payButton = FindElement(By.XPath(".//*[@class='paypal-checkout-button js_paypal_button_on_billing_form']"), logger);
-                //payButton.Click();
                 Thread.Sleep(500);
                 TryAndClick("(.//*[@class='checkbox-input'])[7]", 15);
                 TryAndClick(".//*[@class='paypal-checkout-button js_paypal_button_on_billing_form']", 15);
@@ -2220,14 +2272,13 @@ namespace SeleniumProj
                     #region FindElementsThirdScreen
                     IWebElement payPalEmail = FindElement(By.XPath(".//*[@id='email']"), logger);
                     IWebElement payPalPassword = FindElement(By.XPath(".//*[@id='password']"), logger);
-                    IWebElement loginToPaypal = FindElement(By.XPath(".//*[@id='btnLogin']"), logger);
                     #endregion
 
                     #region ClickingAndSendingKeysThirdScreen
                     payPalEmail.Clear();
-                    payPalEmail.SendKeys("calzedonia.test@calzedonia.it");
-                    payPalPassword.SendKeys("test$prova");
-                    loginToPaypal.Click();
+                    payPalEmail.SendKeys(jsonSetup.credentials["paypalEmail"]);
+                    payPalPassword.SendKeys(jsonSetup.credentials["paypalPassword"]);
+                    TryAndClick(".//*[@id='btnLogin']", 15); 
                     #endregion
                 }
                
@@ -2244,31 +2295,31 @@ namespace SeleniumProj
 
                 driver.SwitchTo().Window(driver.WindowHandles.First());
 
-                if (i == 0)
-                {
-                    #region FindElementsFifthScreen
-                    IWebElement numberInputSecond = FindElement(By.XPath(".//*[@class='shippingPhoneNumber']"), logger);
-                    IWebElement continueButtonToPay = FindElement(By.XPath(".//*[@value='submit-shipping']"), logger);
-                    #endregion
+                //if (i == 0)
+                //{
+                //    #region FindElementsFifthScreen
+                //    IWebElement numberInputSecond = FindElement(By.XPath(".//*[@class='shippingPhoneNumber']"), logger);
+                //    IWebElement continueButtonToPay = FindElement(By.XPath(".//*[@value='submit-shipping']"), logger);
+                //    #endregion
 
-                    #region ClickingAndSendingKeysFifthScreen
-                    IWebElement numberPrefixSecond = FindElement(By.XPath("(.//*[@class='chosen-container chosen-container-single chosen-container-single-nosearch'])[1]"), logger);
-                    numberPrefixSecond.Click();
-                    Thread.Sleep(500);
-                    IWebElement numberSelectSecond = FindElement(By.XPath(".//*[@data-option-array-index='2']"), logger);
-                    numberSelectSecond.Click();
-                    numberInputSecond.SendKeys("123456958");
-                    continueButtonToPay.Click();
-                    #endregion
+                //    #region ClickingAndSendingKeysFifthScreen
+                //    IWebElement numberPrefixSecond = FindElement(By.XPath("(.//*[@class='chosen-container chosen-container-single chosen-container-single-nosearch'])[1]"), logger);
+                //    numberPrefixSecond.Click();
+                //    Thread.Sleep(500);
+                //    IWebElement numberSelectSecond = FindElement(By.XPath($".//*[@data-option-array-index='{jsonSetup.credentials["userNumberPrefix"]}']"), logger);
+                //    numberSelectSecond.Click();
+                //    numberInputSecond.SendKeys(jsonSetup.credentials["userNumber"]);
+                //    continueButtonToPay.Click();
+                //    #endregion
 
-                    #region FindElementForFinalizingOrder
-                    IWebElement sendOrderButton = FindElement(By.XPath(".//*[@class='button button-black wide submit-payment fwidth-padding']"), logger);
-                    #endregion
+                //    #region FindElementForFinalizingOrder
+                //    IWebElement sendOrderButton = FindElement(By.XPath(".//*[@class='button button-black wide submit-payment fwidth-padding']"), logger);
+                //    #endregion
 
-                    #region ClickElementForFinalizingOrder
-                    sendOrderButton.Click();
-                    #endregion
-                }
+                //    #region ClickElementForFinalizingOrder
+                //    sendOrderButton.Click();
+                //    #endregion
+                //}
 
                 #region Login 
                 
@@ -2279,7 +2330,7 @@ namespace SeleniumProj
                     #endregion
 
                     #region ClickingAndSendingKeysFinalScreen
-                    passwordForLogin.SendKeys("Test??170");
+                    passwordForLogin.SendKeys(jsonSetup.credentials["userPassword"]);
                     TryAndClick(".//*[@id='login']", 15); 
 
                     #endregion
@@ -2294,9 +2345,8 @@ namespace SeleniumProj
                 string str = orderText.Text;
 
                 IWebElement orderTextAmount = FindElement(By.XPath(".//*[@class='grand-total-sum']"), logger);
-                string orderPaymentAmountText = orderTextAmount.Text;
-                Console.WriteLine($"({ skuAndAttributes[0]} {skuAndAttributes[1]})");  
-                InsertOrder($"C:/Users/GrabusicT/Documents/SeleniumTesting/SeleniumAutomation/SeleniumProj/bin/Debug/orders/paypal/orders-paypal-{timeFile.ToFileTime()}.csv", "Falconeri", locales[i], GetOrderNumber(str), "Soldato", "Standard Shipping", "PayPal", orderPaymentAmountText, skuAndAttributes, isLoggedIn);
+                string orderPaymentAmountText = orderTextAmount.Text; 
+                InsertOrder($"C:/Users/GrabusicT/Documents/SeleniumTesting/SeleniumAutomation/SeleniumProj/bin/Debug/orders/paypal/orders-paypal-{timeFile.ToFileTime()}.csv", "Falconeri", jsonSetup.orderSetup[0].locales[i], GetOrderNumber(str), "Soldato", "Standard Shipping", "PayPal", orderPaymentAmountText, skuAndAttributes, isLoggedIn);
                 #endregion
 
             }

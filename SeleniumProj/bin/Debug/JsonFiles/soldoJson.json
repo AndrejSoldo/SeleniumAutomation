@@ -2,7 +2,7 @@
   "orderSetup": [
     {
       "locales": [ "us", "de" ],
-      "products": [ "231231++ajsdnasd", "34234++fhsdjk" ],
+      "products": [ "DAL449A++8521M", "DAL449A++8521L" ],
       "userChoiceNewsletter": [ true, true ],
       "isRegistered": true
     },
@@ -15,6 +15,7 @@
   ],
   "credentials": {
     "userEmail": "KTeyGGrWE170@yopmail.com",
+    "userPassword": "Test??170",
     "userNumberPrefix": "2",
     "userNumber": "12345678",
     "userName": "KTeyG",
