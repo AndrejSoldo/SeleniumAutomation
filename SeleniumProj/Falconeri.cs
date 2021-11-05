@@ -279,10 +279,7 @@ namespace SeleniumProj
                         //var orders = Orders.GetOrders();
                         //csvWriter.WriteRecords(orders);
                         string listOfSkusAndAttributes = "";
-                        
                         listOfSkusAndAttributes = string.Join(",",skuAndAttribute.ToArray());  
-                        
-                        Console.WriteLine(listOfSkusAndAttributes);
                         var order = Orders.AddOrder(brand,locale,orderNum, lastName, shippingMethod, paymentMethod, paymentAmount, listOfSkusAndAttributes, isRegistered);
                         csvWriter.WriteRecords(order);
                     }
@@ -1517,7 +1514,7 @@ namespace SeleniumProj
             //https://test.falconeri.com/us/product/DAL449A++8521M.html
             var logger = NLog.Web.NLogBuilder.ConfigureNLog("NLog.config").GetCurrentClassLogger();
             IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
-            var csv = InitializeOrderInfoCSV("orderingCsv/orderInfo.csv", ";");
+            var csv = InitializeOrderInfoCSV("C:/Users/GrabusicT/Documents/SeleniumTesting/SeleniumAutomation/SeleniumProj/bin/Debug/orderingCsv/orderInfo.csv", ";");
             WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(60));
             string[] locales = new string[] { "us", "de" };
             List<string> skuAndAttributes = new List<string>();
@@ -1684,7 +1681,7 @@ namespace SeleniumProj
                 IWebElement orderTextAmount = FindElement(By.XPath(".//*[@class='grand-total-sum']"), logger);
                 string orderPaymentAmountText = orderTextAmount.Text;
 
-                InsertOrder($"orders/creditcard/orders-creditcard-{timeFile.ToFileTime()}.csv","Falconeri",locales[i], GetOrderNumber(str), "Soldato","Standard Shipping", "Credit card", orderPaymentAmountText, skuAndAttributes, isLoggedIn);
+                InsertOrder($"C:/Users/GrabusicT/Documents/SeleniumTesting/SeleniumAutomation/SeleniumProj/bin/Debug/orders/creditcard/orders-creditcard-{timeFile.ToFileTime()}.csv","Falconeri",locales[i], GetOrderNumber(str), "Soldato","Standard Shipping", "Credit card", orderPaymentAmountText, skuAndAttributes, isLoggedIn);
                 #endregion
 
             }
@@ -2017,7 +2014,7 @@ namespace SeleniumProj
             //https://test.falconeri.com/us/product/DAL449A++8521M.html
             var logger = NLog.Web.NLogBuilder.ConfigureNLog("NLog.config").GetCurrentClassLogger();
             IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
-            var csv = InitializeOrderInfoCSV("orderingCsv/orderInfo.csv", ";");
+            var csv = InitializeOrderInfoCSV("C:/Users/GrabusicT/Documents/SeleniumTesting/SeleniumAutomation/SeleniumProj/bin/Debug/orderingCsv/orderInfo.csv", ";");
             WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(60));
             string[] locales = new string[] { "us", "de"};
             #endregion
@@ -2217,12 +2214,11 @@ namespace SeleniumProj
                 {
                     #region FindElementsFinalScreen
                     IWebElement passwordForLogin = FindElement(By.XPath("(.//*[@name='loginPassword'])[2]"), logger);
-                    IWebElement loginButton = FindElement(By.XPath(".//*[@id='login']"), logger);
                     #endregion
 
                     #region ClickingAndSendingKeysFinalScreen
                     passwordForLogin.SendKeys("Test??170");
-                    loginButton.Click();
+                    TryAndClick(".//*[@id='login']", 15); 
 
                     #endregion
                 }
@@ -2238,7 +2234,7 @@ namespace SeleniumProj
                 IWebElement orderTextAmount = FindElement(By.XPath(".//*[@class='grand-total-sum']"), logger);
                 string orderPaymentAmountText = orderTextAmount.Text;
                 Console.WriteLine($"({ skuAndAttributes[0]} {skuAndAttributes[1]})");  
-                InsertOrder($"orders/paypal/orders-paypal-{timeFile.ToFileTime()}.csv", "Falconeri", locales[i], GetOrderNumber(str), "Soldato", "Standard Shipping", "PayPal", orderPaymentAmountText, skuAndAttributes, isLoggedIn);
+                InsertOrder($"C:/Users/GrabusicT/Documents/SeleniumTesting/SeleniumAutomation/SeleniumProj/bin/Debug/orders/paypal/orders-paypal-{timeFile.ToFileTime()}.csv", "Falconeri", locales[i], GetOrderNumber(str), "Soldato", "Standard Shipping", "PayPal", orderPaymentAmountText, skuAndAttributes, isLoggedIn);
                 #endregion
 
             }
