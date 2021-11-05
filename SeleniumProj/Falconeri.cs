@@ -1781,7 +1781,7 @@ namespace SeleniumProj
                 IWebElement orderTextAmount = FindElement(By.XPath(".//*[@class='grand-total-sum']"), logger);
                 string orderPaymentAmountText = orderTextAmount.Text;
 
-                InsertOrder($"C:/Users/GrabusicT/Documents/SeleniumTesting/SeleniumAutomation/SeleniumProj/bin/Debug/orders/creditcard/orders-creditcard-{timeFile.ToFileTime()}.csv","Falconeri",jsonSetup.orderSetup[0].locales[i], GetOrderNumber(str), jsonSetup.credentials["userLastName"],"Standard Shipping", "Credit card", orderPaymentAmountText, skuAndAttributes, isLoggedIn);
+                InsertOrder($"C:/Users/GrabusicT/Documents/SeleniumTesting/SeleniumAutomation/SeleniumProj/bin/Debug/orders/creditcard/orders-creditcard-{timeFile.ToFileTime()}.csv","Falconeri",jsonSetup.orderSetup[0].locales[i], GetOrderNumber(str), jsonSetup.credentials["userSurname"],"Standard Shipping", "Credit card", orderPaymentAmountText, skuAndAttributes, isLoggedIn);
                 #endregion
 
             }
@@ -2347,7 +2347,7 @@ namespace SeleniumProj
 
                 IWebElement orderTextAmount = FindElement(By.XPath(".//*[@class='grand-total-sum']"), logger);
                 string orderPaymentAmountText = orderTextAmount.Text; 
-                InsertOrder($"C:/Users/GrabusicT/Documents/SeleniumTesting/SeleniumAutomation/SeleniumProj/bin/Debug/orders/paypal/orders-paypal-{timeFile.ToFileTime()}.csv", "Falconeri", jsonSetup.orderSetup[0].locales[i], GetOrderNumber(str), jsonSetup.credentials["userLastName"], "Standard Shipping", "PayPal", orderPaymentAmountText, skuAndAttributes, isLoggedIn);
+                InsertOrder($"C:/Users/GrabusicT/Documents/SeleniumTesting/SeleniumAutomation/SeleniumProj/bin/Debug/orders/paypal/orders-paypal-{timeFile.ToFileTime()}.csv", "Falconeri", jsonSetup.orderSetup[0].locales[i], GetOrderNumber(str), jsonSetup.credentials["userSurname"], "Standard Shipping", "PayPal", orderPaymentAmountText, skuAndAttributes, isLoggedIn);
                 #endregion
 
             }
