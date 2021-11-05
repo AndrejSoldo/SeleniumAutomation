@@ -184,10 +184,10 @@ namespace SeleniumProj
 
         public SoldoJson InitializeJson(string name)
         {
-            StreamReader fstream = new StreamReader("JsonFiles/" + name);
+            StreamReader fstream = new StreamReader("C:/Users/GrabusicT/Documents/SeleniumTesting/SeleniumAutomation/SeleniumProj/bin/Debug/JsonFiles/" + name);
 
 
-            var myjson = JsonSerializer.Deserialize<SoldoJson>(fstream.ReadToEnd(), new JsonSerializerOptions { Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping });
+            var myjson = JsonSerializer.Deserialize<SoldoJson>(fstream.ReadToEnd(), new JsonSerializerOptions { Encoder =System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping });
 
             return myjson;
         }
