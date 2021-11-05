@@ -1273,7 +1273,6 @@ namespace SeleniumProj
             // Create a Regex
             Regex rg = new Regex(pattern);
             string orderNumber = Regex.Replace(orderText, pattern, "");
-            Console.WriteLine(orderNumber);
             return orderNumber;
         }
 
@@ -1639,6 +1638,7 @@ namespace SeleniumProj
                 #endregion
 
                 #region FindContinueToShippingMethod
+                Thread.Sleep(500);
                 TryAndClick(".//*[@class='button button-black submit-shipping wide fwidth-padding']", 5);
                 #endregion
                 //#region FindContinueToShippingMethod
@@ -1707,8 +1707,9 @@ namespace SeleniumProj
                 TryAndClick($"(.//*[@data-option-array-index='{jsonSetup.credentials["userState"]}'])[2]", 10);
                 IWebElement countryButton = FindElement(By.XPath(".//*[@for='shippingCountry']"), logger);
                 countryButton.Click();
-                IWebElement countryChoiceButton = FindElement(By.XPath($"(.//*[@data-option-array-index='{jsonSetup.credentials["userCountry"]}'])[3]"), logger);
-                countryChoiceButton.Click();
+                //IWebElement countryChoiceButton = FindElement(By.XPath($"(.//*[@data-option-array-index='{jsonSetup.credentials["userCountry"]}'])[3]"), logger);
+                //countryChoiceButton.Click();
+                TryAndClick($"(.//*[@data-option-array-index='{jsonSetup.credentials["userCountry"]}'])[3]", 15);
                 continueButtonOntoPayment.Click();
                 #endregion
 
@@ -1780,7 +1781,7 @@ namespace SeleniumProj
                 IWebElement orderTextAmount = FindElement(By.XPath(".//*[@class='grand-total-sum']"), logger);
                 string orderPaymentAmountText = orderTextAmount.Text;
 
-                InsertOrder($"C:/Users/GrabusicT/Documents/SeleniumTesting/SeleniumAutomation/SeleniumProj/bin/Debug/orders/creditcard/orders-creditcard-{timeFile.ToFileTime()}.csv","Falconeri",jsonSetup.orderSetup[0].locales[i], GetOrderNumber(str), "Soldato","Standard Shipping", "Credit card", orderPaymentAmountText, skuAndAttributes, isLoggedIn);
+                InsertOrder($"C:/Users/GrabusicT/Documents/SeleniumTesting/SeleniumAutomation/SeleniumProj/bin/Debug/orders/creditcard/orders-creditcard-{timeFile.ToFileTime()}.csv","Falconeri",jsonSetup.orderSetup[0].locales[i], GetOrderNumber(str), jsonSetup.credentials["userLastName"],"Standard Shipping", "Credit card", orderPaymentAmountText, skuAndAttributes, isLoggedIn);
                 #endregion
 
             }
@@ -2177,7 +2178,7 @@ namespace SeleniumProj
 
                 #region FindContinueToShippingMethod
                 //IWebElement continueButton = FindElement(By.XPath(".//*[@class='button button-black submit-shipping wide fwidth-padding']"), logger);
-                //Thread.Sleep(1000);
+                Thread.Sleep(500);
                 TryAndClick(".//*[@class='button button-black submit-shipping wide fwidth-padding']", 10);
                 #endregion
 
@@ -2346,7 +2347,7 @@ namespace SeleniumProj
 
                 IWebElement orderTextAmount = FindElement(By.XPath(".//*[@class='grand-total-sum']"), logger);
                 string orderPaymentAmountText = orderTextAmount.Text; 
-                InsertOrder($"C:/Users/GrabusicT/Documents/SeleniumTesting/SeleniumAutomation/SeleniumProj/bin/Debug/orders/paypal/orders-paypal-{timeFile.ToFileTime()}.csv", "Falconeri", jsonSetup.orderSetup[0].locales[i], GetOrderNumber(str), "Soldato", "Standard Shipping", "PayPal", orderPaymentAmountText, skuAndAttributes, isLoggedIn);
+                InsertOrder($"C:/Users/GrabusicT/Documents/SeleniumTesting/SeleniumAutomation/SeleniumProj/bin/Debug/orders/paypal/orders-paypal-{timeFile.ToFileTime()}.csv", "Falconeri", jsonSetup.orderSetup[0].locales[i], GetOrderNumber(str), jsonSetup.credentials["userLastName"], "Standard Shipping", "PayPal", orderPaymentAmountText, skuAndAttributes, isLoggedIn);
                 #endregion
 
             }
