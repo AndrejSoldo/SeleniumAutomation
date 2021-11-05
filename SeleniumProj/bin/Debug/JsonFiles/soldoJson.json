@@ -1,11 +1,36 @@
 {
-    "Id": "1",
-    "Name": "Andrejjj",
-    "LastName": "Soldooo",
-    "Products": [ "Product1", "Product2", "Product3" ],
-    "Locales": [ "Hr", "En", "De" ],
-    "ObjectHolder": {
-        "id": "ObjectHolderId",
-        "name": "Mr. Real ObjectHolder"
+  "orderSetup": [
+    {
+      "locales": [ "us", "de" ],
+      "products": [ "231231++ajsdnasd", "34234++fhsdjk" ],
+      "userChoiceNewsletter": [ true, true ],
+      "isRegistered": true
+    },
+    {
+      "locales": [ "ru", "it" ],
+      "products": [ "fdsjh++394", "3234++dsfkh" ],
+      "userChoiceNewsletter": [ false, false ],
+      "isRegistered": false
     }
+  ],
+  "credentials": {
+    "userEmail": "KTeyGGrWE170@yopmail.com",
+    "userNumberPrefix": "2",
+    "userNumber": "12345678",
+    "userName": "KTeyG",
+    "userSurname": "KTeyG",
+    "userAddress": "10447 Kenai Spur Hwy",
+    "userAdditionalAddressInfo": "Mi 2",
+    "userTown": "Kenai",
+    "userZIP": "99611",
+    "userState": "2",
+    "userCountry": "0",
+    "creditCardName": "Kar",
+    "creditCardNumber": "4775718800002026",
+    "creditCardMonth": "1",
+    "creditCardYear": "2",
+    "creditCardCVV": "123",
+    "paypalEmail": "calzedonia.test@calzedonia.it",
+    "paypalPassword": "test$prova"
+  }
 }

@@ -54,6 +54,21 @@ namespace SeleniumProj
 
     }
 
+    public class JsonSetup
+    {
+        public List<JsonOrderInfo> orderSetup { get; set; }
+        public IDictionary<string, string> credentials { get; set; } 
+    }
+
+    public class JsonOrderInfo
+    {
+        public List<string> locales { get; set; }
+        public List<string> products { get; set; }
+        public List<bool> userChoiceNewsletter { get; set; } 
+        public bool isRegistered { get; set; }
+    }
+
+
     public class Users
     {
         public int Id { get; set; }
@@ -188,6 +203,16 @@ namespace SeleniumProj
 
 
             var myjson = JsonSerializer.Deserialize<SoldoJson>(fstream.ReadToEnd(), new JsonSerializerOptions { Encoder =System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping });
+
+            return myjson;
+        }
+
+        public JsonSetup InitializeFalconeriSetup(string name)
+        {
+            StreamReader fstream = new StreamReader("C:/Users/GrabusicT/Documents/SeleniumTesting/SeleniumAutomation/SeleniumProj/bin/Debug/JsonFiles/" + name);
+
+
+            var myjson = JsonSerializer.Deserialize<JsonSetup>(fstream.ReadToEnd(), new JsonSerializerOptions { Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping });
 
             return myjson;
         }
@@ -972,6 +997,42 @@ namespace SeleniumProj
             //.//*[@data-pid="DAL449A  8521M" and @class="cell auto add-to-cart button button-addtocart"]
         }
 
+        [Test()]
+        public void FalconeriSetup()
+        {
+            JsonSetup desJson = InitializeFalconeriSetup("soldoJson.json");
+
+            //Console.WriteLine(desJson.credentials["userEmail"]);
+            Console.WriteLine(desJson.orderSetup[0].locales[0]);
+            Console.WriteLine(desJson.orderSetup[0].locales[1]);
+
+            Console.WriteLine(desJson.orderSetup[0].products[0]);
+            Console.WriteLine(desJson.orderSetup[0].products[1]);
+
+            Console.WriteLine(desJson.orderSetup[0].userChoiceNewsletter[0]);
+            Console.WriteLine(desJson.orderSetup[0].userChoiceNewsletter[1]);
+            Console.WriteLine(desJson.orderSetup[0].isRegistered);
+
+            Console.WriteLine(desJson.orderSetup[1].locales[0]);
+            Console.WriteLine(desJson.orderSetup[1].locales[1]);
+
+            Console.WriteLine(desJson.orderSetup[1].products[0]);
+            Console.WriteLine(desJson.orderSetup[1].products[1]);
+
+            Console.WriteLine(desJson.orderSetup[1].userChoiceNewsletter[0]);
+            Console.WriteLine(desJson.orderSetup[1].userChoiceNewsletter[1]);
+            Console.WriteLine(desJson.orderSetup[1].isRegistered);
+
+
+
+            //Console.WriteLine(InitializeJson("soldoJson.json").Name);
+            //Console.WriteLine(InitializeJson("soldoJson.json").LastName);
+            //Console.WriteLine(InitializeJson("soldoJson.json").Products[0]);
+            //Console.WriteLine(InitializeJson("soldoJson.json").Locales[0]);
+            //Console.WriteLine(InitializeJson("soldoJson.json").ObjectHolder["id"]);
+            //Console.WriteLine(InitializeJson("soldoJson.json").ObjectHolder["name"]);
+
+        }
 
         [Test()]
         public void Json()
@@ -1519,6 +1580,7 @@ namespace SeleniumProj
             string[] locales = new string[] { "us", "de" };
             List<string> skuAndAttributes = new List<string>();
 
+
             DateTime timeFile = DateTime.UtcNow;
 
             for (int i = 0; i < locales.Length; i++)
@@ -1607,7 +1669,7 @@ namespace SeleniumProj
                 //IWebElement numberPrefix = FindElement(By.XPath(".//*[@class='chosen-container chosen-container-single chosen-container-single-nosearch']"), logger);
                 //numberPrefix.Click();
                 TryAndClick(".//*[@class='chosen-container chosen-container-single chosen-container-single-nosearch']", 10);
-                TryAndClick(".//*[@data-option-array-index='2']", 10);
+                TryAndClick($".//*[@data-option-array-index='2']", 10);
                 TryAndClick(".//*[@id='shippingPhoneNumber']", 10);
                 numberInput.SendKeys("123456958");
                 newsButton.Click();
