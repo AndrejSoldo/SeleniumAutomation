@@ -1,14 +1,14 @@
 {
   "orderSetup": [
     {
-      "locales": [ "us", "de" ],
-      "products": [ "DAL449A++8521M", "DAL449A++8521L" ],
+      "locales": ["de"],
+      "products": [ "DML261Y++9107S"],
       "userChoiceNewsletter": [ true, true ],
-      "isRegistered": true
+      "isRegistered": false
     },
     {
-      "locales": [ "ru", "it" ],
-      "products": [ "fdsjh++394", "3234++dsfkh" ],
+      "locales": ["de"],
+      "products": [ "DML261Y++9107S" ],
       "userChoiceNewsletter": [ false, false ],
       "isRegistered": false
     }
@@ -25,7 +25,7 @@
     "userAdditionalAddressInfo": "Mi 2",
     "userTown": "Kenai",
     "userZIP": "99611",
-    "userState": "2",
+    "userState": "5",
     "userCountry": "0",
     "creditCardName": "Kar",
     "creditCardNumber": "4775718800002026",
