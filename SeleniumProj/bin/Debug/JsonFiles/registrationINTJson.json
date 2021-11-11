@@ -1,0 +1,30 @@
+{
+  "registrationSetup": [
+    {
+      "userEmail": "fdsdsds@yopmail.com",
+      "userNumberPrefix": "+42",
+      "userNumber": "7654456",
+      "userGender": "1",
+      "userName": "Tea",
+      "userLastName": "TestLastName",
+      "userPassword": "Test?123",
+      "userNewsChoice": "yes",
+      "userPersonalizedNews": "yes",
+      "userLoyalty": "yes",
+      "userBirthDate": "16-09-1999"
+    },
+    {
+      "userEmail": "ewwwe@yopmail.com",
+      "userNumberPrefix": "+42",
+      "userNumber": "4352525",
+      "userGender": "1",
+      "userName": "Tea",
+      "userLastName": "TestLastName",
+      "userPassword": "Test?123",
+      "userNewsChoice": "yes",
+      "userPersonalizedNews": "yes",
+      "userLoyalty": "yes",
+      "userBirthDate": "16-09-1999"
+    }
+  ]
+}

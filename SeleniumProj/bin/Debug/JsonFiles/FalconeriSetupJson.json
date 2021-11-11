@@ -1,0 +1,45 @@
+{
+  "orderSetup": [
+    {
+      "locales": [ "de" ],
+      "products": [ "DML261Y++9107S" ],
+      "userChoiceNewsletter": [ true, true ],
+      "isRegistered": false
+    },
+    {
+      "locales": [ "de" ],
+      "products": [ "DML261Y++9107S" ],
+      "userChoiceNewsletter": [ false, false ],
+      "isRegistered": false
+    }
+  ],
+
+  "credentials": [
+    {
+      "userEmail": "KTeyGGrWE170@yopmail.com",
+      "userPassword": "Test??170",
+      "userGender": "1",
+      "userNumberPrefix": "2",
+      "userNumber": "12345678",
+      "userName": "Tea",
+      "userLastName": "TestLastName",
+      "userSurname": "TestLastName",
+      "userAddress": "10447 Kenai Spur Hwy",
+      "userAdditionalAddressInfo": "Mi 2",
+      "userTown": "Kenai",
+      "userZIP": "99611",
+      "userState": "5",
+      "userCountry": "0",
+      "creditCardName": "Kar",
+      "creditCardNumber": "4775718800002026",
+      "creditCardMonth": "1",
+      "creditCardYear": "2",
+      "creditCardCVV": "123",
+      "paypalEmail": "calzedonia.test@calzedonia.it",
+      "paypalPassword": "test$prova",
+      "userBirthMonth": "1",
+      "userBirthDay": "1",
+      "userBirthYear": "23"
+    }
+  ]
+}
