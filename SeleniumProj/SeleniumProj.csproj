@@ -150,9 +150,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseClass\BaseIntimissimi.cs" />
+    <Compile Include="CodeSnippets\CodeSnippetsFLC.cs" />
     <Compile Include="Falconeri.cs" />
     <Compile Include="BaseClass\BaseFalconeri.cs" />
     <Compile Include="BaseClass\BaseTest.cs" />
+    <Compile Include="Intimissimi.cs" />
     <Compile Include="Test.cs" />
     <Compile Include="CsvTemplates\Orders.cs" />
   </ItemGroup>
